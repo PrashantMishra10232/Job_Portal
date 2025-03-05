@@ -3,8 +3,7 @@ import {ApiError} from "../utils/ApiError.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import {User} from "../models/user.model.js"
 import JsonWebToken from "jsonwebtoken";
-import {uploadOnCloudinary} from "../utils/cloudinary.js"
-
+import {uploadOnCloudinary,deleteFromCloudinary} from "../utils/cloudinary.js"
 
 const generateAccessAndRefreshToken = async(userId)=>{
     try {
@@ -13,7 +12,7 @@ const generateAccessAndRefreshToken = async(userId)=>{
         const refreshToken = user.generateRefreshToken()
 
         user.refreshToken=refreshToken //assigning the refreshToken to the user object
-        await User.save({validateBeforeSave:false})
+        await user.save({validateBeforeSave:false})
 
         return {accessToken,refreshToken}
     } catch (error) {
@@ -24,7 +23,7 @@ const generateAccessAndRefreshToken = async(userId)=>{
 const registerUser = asyncHandler(async(req,res)=>{
     const {fullName,email,password,phoneNumber,role} = req.body;
 
-    if([fullName,email,phoneNumber,password,role].some((field)=>field.trim()==="")){
+    if([fullName,email,phoneNumber,password,role].some((field)=>field?.trim()==="")){
         throw new ApiError(400,"All fields are required")
     }
 
@@ -38,16 +37,19 @@ const registerUser = asyncHandler(async(req,res)=>{
 
     //upload a profile picture
     console.log(req.file);
-    const profileLocalPath = req.file?.path;
+    const profilePhotoLoacalPath = req.file?.path;
 
-    if(!profileLocalPath){
-        throw new ApiError(400,"upload a Profile Picture")
-    }
+    // console.log(profilePhotoLoacalPath);
 
-    const profilePhoto = await uploadOnCloudinary(profileLocalPath)
+    const profilePhoto = await uploadOnCloudinary(profilePhotoLoacalPath)
+
+    // console.log(profilePhoto);
+    const profilePhoto_id =profilePhoto.public_id;
+
+    
 
     if(!profilePhoto){
-        throw new ApiError(400,"Profile Picture is required")
+        throw new ApiError(401,"Error while uploading the profile photo")
     }
 
     const user = await User.create({
@@ -57,7 +59,8 @@ const registerUser = asyncHandler(async(req,res)=>{
         role,
         password,
         profile:{
-            profilePhoto: profilePhoto?.url || ""
+            profilePhoto: profilePhoto?.url || "",
+            profilePhoto_id: profilePhoto_id
         }
     })
 
@@ -88,7 +91,7 @@ const loginUser =  asyncHandler(async(req,res)=>{
     }
     
     //checkin if the password is correct
-    const isPasswordValid = await User.isPasswordCorrect(password)
+    const isPasswordValid = await user.isPasswordCorrect(password)
 
     if(!isPasswordValid){
         throw new ApiError(401,"Invalid user credentials")
@@ -183,40 +186,52 @@ const refreshAccessToken = asyncHandler(async(req,res)=>{
 
 const updateProfile = asyncHandler(async(req,res)=>{
     const{fullName, email, phoneNumber, bio, skills} = req.body;
-    if([fullName, email, phoneNumber, bio, skills].some((fields)=>fields.trim()==="")){
-        throw new ApiError(404,"Some fields re missing")
-    }    
+    // if([fullName, email, phoneNumber, bio, skills].some((fields)=>fields?.trim()==="")){
+    //     throw new ApiError(404,"Some fields are missing")
+    // }    
 
-    const skillsArray = skills.split(",")
-    const userId = req.id;
+    const skillsArray = skills?.split(",")
+    const userId = req.user._id;
     let user = await User.findById(userId);
 
     if(!user){
         throw new ApiError(400,"user not found")
     }
 
-    user.fullName = fullName,
-    user.email = email,
-    user.phoneNumber = phoneNumber,
-    user.profile.bio = bio,
-    user.profile.skills = skillsArray
+    if(fullName)user.fullName = fullName
+    if(email)user.email = email
+    if(phoneNumber)user.phoneNumber = phoneNumber
+    if(bio)user.profile.bio = bio
+    if(skills)user.profile.skills = skillsArray
 
     //resume
 
     await user.save();
+
+    return res.status(200)
+    .json(new ApiResponse(200,{user},'Profile updated'))
 })
 
 const updateProfilePhoto = asyncHandler(async(req,res)=>{
-    const profilePhotoPath = req.file.path;
+    const profilePhotoPath = req.file?.path;
 
     if(!profilePhotoPath){
         throw new ApiError(400,"Profile Photo file is missing")
     }
 
-    const profilePhoto = uploadOnCloudinary(profilePhotoPath);
+    // Check if the user has an existing profile photo ID (only delete if it exists)
+if (User.profilePhoto_id) {
+    try {
+      await deleteFromCloudinary(User.profilePhoto_id);  // Delete the previous profile photo from Cloudinary
+    } catch (error) {
+      throw new ApiError(500, "Error while deleting previous profile photo");
+    }
+  }
 
-    if(!profilePhoto.url){
-        throw new ApiError(400,"Error while uploading on profile photo")
+    const profilePhoto = await uploadOnCloudinary(profilePhotoPath);
+
+    if(!profilePhoto){
+        throw new ApiError(400,"Error while uploading profile photo")
     }
 
     const user = await User.findByIdAndUpdate(
