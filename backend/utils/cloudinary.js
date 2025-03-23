@@ -14,10 +14,16 @@ const uploadOnCloudinary = async(localFilePath)=>{
             console.error("No file path provided for upload.");
             return null;
         };
+
+        // Verify that the file exists before attempting to upload
+        if (!fs.existsSync(localFilePath)) {
+            console.error("File does not exist at path:", localFilePath);
+            return null;
+        }
         //upload the file on clodinary
         const response = await cloudinary.uploader.upload(localFilePath,{
-            resource_type:"image",
-            folder:"Job_Portal/Profile_Photos"
+            resource_type:"auto",
+            folder:"Job_Portal/resumes"
         })
 
         // console.log("File uploaded successfully:", response.url);
