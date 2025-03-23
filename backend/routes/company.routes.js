@@ -1,5 +1,5 @@
 import express from "express"
-import verifyJWT from "../middlewares/auth.middleware.js"
+import {verifyJWT} from "../middlewares/auth.middleware.js"
 import {getCompany,getCompanyById,registerCompany,updateCompany} from "../controllers/company.controller.js"
 import { upload } from "../middlewares/multer.middleware.js";
 

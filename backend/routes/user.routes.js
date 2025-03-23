@@ -18,7 +18,7 @@ router.route("/register").post(
 router.route("/login").post(loginUser)
 router.route("/logOut").post(verifyJWT,logOut)
 router.route("/refresh_token").post(refreshAccessToken)
-router.route("/update_Account").patch(verifyJWT,updateProfile)
+router.route("/update_Account").patch(verifyJWT,upload.single("resume"),updateProfile)
 router.route("/profilePhoto").patch(verifyJWT,upload.single("profilePhoto"),updateProfilePhoto)
 
 export default router;
