@@ -3,8 +3,10 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser"
 import cors from "cors"
 import connectDB from "./utils/connection.js";
+// import { ApiError } from "./utils/ApiError.js";
 
 const app = express();
+
 dotenv.config({
     path: "./.env"
 })
@@ -19,11 +21,12 @@ app.use(cors({
     origin:process.env.CORS_ORIGIN,
     credentials: true
 }))
+console.log("Allowed CORS Origin:", process.env.CORS_ORIGIN);
 
 //connection
 connectDB()
 .then(()=>{
-    app.on("error",()=>{
+    app.on("error",(error)=>{
         console.log("Error:", error);
         throw error;
     })
@@ -47,4 +50,14 @@ app.use("/api/v1/application",applicationRouter)
 app.use("/api/v1/job",jobRouter)
 app.use("/api/v1/company",companyRouter)
 
+
+app.use((err, req, res, next) => {
+    console.error("❌ Error Middleware:", err); // Debugging logs
+
+    res.status(err.statusCode || 500).json({
+        success: false,
+        message: err.message || "Internal Server Error",
+        errors: err.errors || [],
+    });
+});
 
