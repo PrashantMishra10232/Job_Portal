@@ -7,7 +7,7 @@ const postJob = asyncHandler(async(req,res)=>{
     const{title,description,requirements,salary,location,jobType,experience,position,companyId}=req.body
     const userId = req.user._id;
      
-    if([title,description,requirements,salary,location,jobType,experience,position,companyId].some((fields)=>fields?.trim()==="")){
+    if([title,description,requirements,location,jobType,companyId].some((fields)=>fields?.trim()==="")){
         throw new ApiError(404,"All fields are required");
     }
 
@@ -51,7 +51,7 @@ const getJobById = asyncHandler(async(req,res)=>{
     const jobId = req.params.id;
     
     const jobs = await Job.findById(jobId).populate({
-        path: "applications"
+        path: "application"
     });
 
     if(!jobs){
