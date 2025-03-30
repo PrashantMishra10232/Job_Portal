@@ -5,7 +5,7 @@ import {verifyJWT} from "../middlewares/auth.middleware.js"
 const router = express.Router();
 
 router.route("/post").post(verifyJWT, postJob);
-router.route("/get").get(verifyJWT, getAllJobs);
+router.route("/get").get(getAllJobs);
 router.route("/getadminjobs").get(verifyJWT, getAdminsJobs);
 router.route("/get/:id").get(verifyJWT, getJobById);
 
