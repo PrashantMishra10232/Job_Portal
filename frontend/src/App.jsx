@@ -1,7 +1,4 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { setUser } from "./redux/authSlice";
 import Login from "./components/auth/Login"
 import Signup from "./components/auth/Signup"
 import Home from "./components/Home"
@@ -12,6 +9,7 @@ import JobDescription from './components/JobDescription';
 import Companies from './components/admin/Companies';
 import CompanyCreate from './components/admin/CompanyCreate';
 import CompanySetup from './components/admin/CompanySetup';
+import AdminJobs from './components/admin/AdminJobs';
 
 // import axios from 'axios';
 // import { USER_API_ENDPOINT } from './utils/constant';
@@ -61,6 +59,10 @@ const appRouter = createBrowserRouter([
   {
     path: '/admin/companies/:id',
     element: <CompanySetup/>
+  },
+  {
+    path: '/admin/jobs',
+    element: <AdminJobs/>
   },
 
 ])
