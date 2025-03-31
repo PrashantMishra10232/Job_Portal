@@ -73,4 +73,11 @@ const getAdminsJobs = asyncHandler(async(req,res)=>{
     return res.status(200).json(new ApiResponse(200,jobs,"Here are the jobs created by you"))
 })
 
-export{postJob,getAdminsJobs,getAllJobs,getJobById}
+const deleteJobs = asyncHandler(async(req,res)=>{
+    const jobId = req.params.id;
+    await Job.findByIdAndDelete(jobId);
+    return res.status(200)
+    .json(new ApiResponse(200,{},"Job deleted successfully"))
+})
+
+export{postJob,getAdminsJobs,getAllJobs,getJobById,deleteJobs}
