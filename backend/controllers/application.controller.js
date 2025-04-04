@@ -49,6 +49,7 @@ const getApplications = asyncHandler(async(req,res)=>{
 
     const jobs = await Job.findById(jobId).populate({
         path:"application",
+        options:{sort:{createdAt:-1}},
         populate:{
             path:"applicant"
         }

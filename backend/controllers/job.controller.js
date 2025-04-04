@@ -2,12 +2,13 @@ import {Job} from "../models/job.model.js"
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/AsyncHandler.js"
+import mongoose from "mongoose";
 
 const postJob = asyncHandler(async(req,res)=>{
-    const{title,description,requirements,salary,location,jobType,experience,position,companyId}=req.body
+    const{title,description,requirements,salary,location,jobType,experience,position,company}=req.body
     const userId = req.user._id;
      
-    if([title,description,requirements,location,jobType,companyId].some((fields)=>fields?.trim()==="")){
+    if([title,description,requirements,location,jobType,company].some((fields)=>fields?.trim()==="")){
         throw new ApiError(404,"All fields are required");
     }
 
@@ -20,7 +21,7 @@ const postJob = asyncHandler(async(req,res)=>{
         jobType,
         experienceLevel: experience,
         position,
-        company:companyId,
+        company: company,
         createdBy:userId
     })
 

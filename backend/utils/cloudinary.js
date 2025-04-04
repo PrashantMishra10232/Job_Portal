@@ -23,7 +23,10 @@ const uploadOnCloudinary = async(localFilePath)=>{
         //upload the file on clodinary
         const response = await cloudinary.uploader.upload(localFilePath,{
             resource_type:"auto",
-            folder:"Job_Portal/resumes"
+            folder:"Job_Portal/resumes",
+            type: "upload",
+            use_filename: true,
+            
         })
 
         // console.log("File uploaded successfully:", response.url);
@@ -55,7 +58,7 @@ const deleteFromCloudinary = async(public_id)=>{
     try {
         if(!public_id) return null;
         const response = await cloudinary.uploader.destroy(public_id,{
-            resource_type:"image"
+            resource_type:"auto"
         })
         return response;
     } catch (error) {
