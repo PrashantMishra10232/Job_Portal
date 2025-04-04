@@ -10,6 +10,9 @@ import Companies from './components/admin/Companies';
 import CompanyCreate from './components/admin/CompanyCreate';
 import CompanySetup from './components/admin/CompanySetup';
 import AdminJobs from './components/admin/AdminJobs';
+import JobSetup from './components/admin/JobSetup'
+import JobApplicantsTable from './components/admin/JobApplicantsTable'
+import ProtectedRoute from './components/admin/ProtectedRoute'
 
 // import axios from 'axios';
 // import { USER_API_ENDPOINT } from './utils/constant';
@@ -50,19 +53,27 @@ const appRouter = createBrowserRouter([
   //admin
   {
     path: '/admin/companies',
-    element: <Companies />
+    element: <ProtectedRoute><Companies /></ProtectedRoute>
   },
   {
     path: '/admin/companies/create',
-    element: <CompanyCreate />
+    element: <ProtectedRoute><CompanyCreate /></ProtectedRoute>
   },
   {
     path: '/admin/companies/:id',
-    element: <CompanySetup/>
+    element: <ProtectedRoute><CompanySetup/></ProtectedRoute>
   },
   {
     path: '/admin/jobs',
-    element: <AdminJobs/>
+    element: <ProtectedRoute><AdminJobs/></ProtectedRoute>
+  },
+  {
+    path: '/admin/jobs/create',
+    element: <ProtectedRoute><JobSetup/></ProtectedRoute>
+  },
+  {
+    path: '/admin/jobs/:id/applicants',
+    element: <ProtectedRoute><JobApplicantsTable/></ProtectedRoute>
   },
 
 ])

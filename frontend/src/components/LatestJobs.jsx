@@ -10,7 +10,7 @@ function LatestJobs() {
       {/* //multiple job cards display */}
       <div className='grid grid-cols-3 gap-4 my-5'>
         {
-          allJobs.length<= 0?<span>No Job Available</span>:allJobs?.slice(0, 6).map((job) => <LatestJobCard key={job._id} job={job}/>)
+          allJobs.length<= 0?<span>No Job Available</span>:allJobs?.slice(0, 6).map((job) => <LatestJobCard  key={job._id} job={job}/>)
         }
       </div>
     </div>
