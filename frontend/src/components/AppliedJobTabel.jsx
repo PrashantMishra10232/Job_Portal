@@ -1,8 +1,32 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { Badge } from './ui/badge'
+import { APPLICATION_API_ENDPOINT } from '@/utils/constant'
+import { useDispatch, useSelector } from 'react-redux'
+import { setAppliedJobs } from '@/redux/applicationSlice'
+import { toast } from 'sonner'
+import axios from 'axios'
 
 function AppliedJobTabel() {
+    const dispatch = useDispatch();
+    const {appliedJobs} = useSelector((state)=>state.application)
+
+    useEffect(()=>{
+        const appliedJobHandler = async()=>{
+            try {
+                const res = await axios.get(`${APPLICATION_API_ENDPOINT}/get`,{withCredentials:true})
+                if(res.data.success){
+                    dispatch(setAppliedJobs(res.data.data));
+                }
+            } catch (error) {
+                console.error(error);
+                toast.error(error.response?.data?.message);
+            }
+        }
+        appliedJobHandler();
+    },[])
+    
+
   return (
     <div>
         <Table>
@@ -17,12 +41,12 @@ function AppliedJobTabel() {
             </TableHeader>
             <TableBody>
                 {
-                    [1,2].map((item,index)=>(
-                        <TableRow key={index}>
-                            <TableCell>16-03-2025</TableCell>
-                            <TableCell>Frontend Developer</TableCell>
-                            <TableCell>Google</TableCell>
-                            <TableCell className='text-right'><Badge>Selected</Badge></TableCell>
+                    appliedJobs.length<=0 ? <span>You haven't applied to any jobs yet</span> : appliedJobs.map((item)=>(
+                        <TableRow key={item._id}>
+                            <TableCell>{item?.createdAt.split("T")[0]}</TableCell>
+                            <TableCell>{item?.job?.title}</TableCell>
+                            <TableCell>{item?.job?.company?.name}</TableCell>
+                            <TableCell className='text-right'><Badge className={`pb-1 ${item.status === "rejected" ? 'bg-red-400' : item.status === "pending" ? 'bg-gray-400' : 'bg-green-400'}`}>{item?.status}</Badge></TableCell>
                         </TableRow>
                     ))
                 }
