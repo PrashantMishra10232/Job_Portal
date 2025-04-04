@@ -37,12 +37,7 @@ const authSlice = createSlice({
         },
         setToken: (state,action)=>{
             state.token = action.payload;
-        },
-        logout: (state) => {
-            state.user = null;
-            state.token = null;
-            localStorage.removeItem("loggedInUser"); // Clear storage on logout
-        },
+        }
     },
 });
 
@@ -53,7 +48,7 @@ export const refreshAccessToken = async()=>{
         dispatch(setToken(res.data.data));
     } catch (error) {
         console.error("Refresh Token expired login again")
-        dispatch(logout());
+        dispatch();
     }
 }
 
