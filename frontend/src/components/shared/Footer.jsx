@@ -23,7 +23,6 @@ function Footer() {
                     <ul className="mt-2 space-y-2 text-gray-400">
                         <li><a href="/jobs" className="hover:text-white">Browse Jobs</a></li>
                         <li><a href="/about" className="hover:text-white">About Us</a></li>
-                        <li><a href="/contact" className="hover:text-white">Contact</a></li>
                     </ul>
                 </div>
 
@@ -31,9 +30,9 @@ function Footer() {
                 <div>
                     <h3 className="text-lg font-semibold">Follow Us</h3>
                     <div className="flex mt-3 space-x-4">
-                        <a href="https://facebook.com" className="text-gray-400 hover:text-white"><FaFacebookF size={20} /></a>
-                        <a href="https://twitter.com" className="text-gray-400 hover:text-white"><FaTwitter size={20} /></a>
-                        <a href="https://linkedin.com" className="text-gray-400 hover:text-white"><FaLinkedinIn size={20} /></a>
+                        <a href="https://facebook.com"  target="_blank" className="text-gray-400 hover:text-white"><FaFacebookF size={20} /></a>
+                        <a href="https://x.com/Prashant1102f"  target="_blank" className="text-gray-400 hover:text-white"><FaTwitter size={20} /></a>
+                        <a href="https://www.linkedin.com/in/prashant-mishra-p1102/"  target="_blank" className="text-gray-400 hover:text-white"><FaLinkedinIn size={20} /></a>
                     </div>
                 </div>
 
@@ -41,7 +40,7 @@ function Footer() {
 
             {/* Copyright */}
             <div className="text-center text-gray-500 text-sm mt-6 border-t border-gray-700 pt-4">
-                © {new Date().getFullYear()} JobPortal. All rights reserved.
+                © {new Date().getFullYear()} ChakriPortal. All rights reserved.
             </div>
         </footer>
     );
