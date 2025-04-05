@@ -63,11 +63,13 @@ function Login() {
             dispatch(setLoading(false))
         }
     }
-    // useEffect(() => {
-    //     if (!user) {
-    //         navigate('/login'); // <- this will loop if not properly guarded
-    //     }
-    // }, []);
+    useEffect(() => {
+        if (!user) {
+            navigate('/login'); // <- this will loop if not properly guarded
+        }else if (user && user.role === "Student") {
+            navigate('/'); // <- this will loop if not properly guarded
+        }
+    }, [user, navigate]);
 
 
     return (

@@ -11,6 +11,7 @@ import { toast } from 'sonner'
 import { useSelector, useDispatch } from 'react-redux'
 import { setLoading } from '@/redux/authSlice'
 import { Loader2 } from 'lucide-react'
+// import { u } from 'framer-motion/dist/types.d-B50aGbjN'
 
 
 
@@ -72,11 +73,11 @@ function Signup() {
         }
     }
 
-    // useEffect(() => {
-    //     if (user) {
-    //         navigate("/");
-    //     }
-    // }, [])
+    useEffect(() => {
+        if (user) {
+            navigate("/");
+        }
+    }, [user, navigate]);
 
     return (
         <div>
