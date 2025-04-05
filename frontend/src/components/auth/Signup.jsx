@@ -72,11 +72,11 @@ function Signup() {
         }
     }
 
-    useEffect(() => {
-        if (user) {
-            navigate("/");
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (user) {
+    //         navigate("/");
+    //     }
+    // }, [])
 
     return (
         <div>
