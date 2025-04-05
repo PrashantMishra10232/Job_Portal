@@ -77,6 +77,7 @@ const getAdminsJobs = asyncHandler(async(req,res)=>{
 const deleteJobs = asyncHandler(async(req,res)=>{
     const jobId = req.params.id;
     await Job.findByIdAndDelete(jobId);
+    await mongoose.model("Application").deleteMany({job: jobId});
     return res.status(200)
     .json(new ApiResponse(200,{},"Job deleted successfully"))
 })
