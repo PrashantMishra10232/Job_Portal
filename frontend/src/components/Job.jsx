@@ -5,7 +5,7 @@ import { Avatar, AvatarImage } from './ui/avatar'
 import { Badge } from './ui/badge'
 import { useNavigate } from 'react-router-dom'
 
-function Job({job}) {
+function Job({ job }) {
   const navigate = useNavigate();
   const daysAgo = Math.floor((new Date() - new Date(job?.createdAt)) / (1000 * 60 * 60 * 24));
   return (
@@ -17,7 +17,7 @@ function Job({job}) {
       <div className='flex items-center gap-2 my-2'>
         <Button className='p-6' variant='outline' size="icon">
           <Avatar>
-            <AvatarImage src='https://static.vecteezy.com/system/resources/previews/000/404/753/original/modern-company-logo-design-vector.jpg' />
+            <AvatarImage src={job?.company?.logo} />
           </Avatar>
         </Button>
         <div>
@@ -28,7 +28,10 @@ function Job({job}) {
 
       <div>
         <h1 className='font-bold text-lg my-2'>{job?.title}</h1>
-        <p className='text-sm text-gray-600'>{job?.description}</p>
+        <div
+          className='pl-4 font-normal text-gray-800 text-sm max-h-[1.5rem] overflow-hidden'
+          dangerouslySetInnerHTML={{ __html: job?.description }}
+        />
       </div>
       <div className='flex items-center gap-2 mt-4'>
         <Badge className='text-blue-700 font-bold' variant='ghost'>{job?.position}Positions</Badge>
@@ -36,7 +39,7 @@ function Job({job}) {
         <Badge className='text-[#7209b7] font-bold' variant='ghost'>{job?.salary}LPA</Badge>
       </div>
       <div className='flex items-center gap-4 mt-4'>
-        <Button variant='outline' onClick={()=>navigate(`/description/${job?._id}`)}>Details</Button>
+        <Button variant='outline' onClick={() => navigate(`/description/${job?._id}`)}>Details</Button>
         <Button className='bg-[#7209b7]'>Save for later</Button>
       </div>
     </div>

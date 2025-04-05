@@ -1,8 +1,8 @@
-import React, {useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Badge } from './ui/badge'
 import { Button } from './ui/button'
-import {setSingleJob} from '@/redux/jobSlice'
-import { useDispatch,useSelector } from 'react-redux'
+import { setSingleJob } from '@/redux/jobSlice'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { JOB_API_ENDPOINT } from '@/utils/constant'
@@ -10,22 +10,22 @@ import { APPLICATION_API_ENDPOINT } from '@/utils/constant'
 import { toast } from 'sonner'
 
 function JobDescription() {
-    const {singleJob} = useSelector(store => store.job);
-    const {user} = useSelector(store => store.auth);
-    const isInitiallyApplied = singleJob?.application?.some(application=>application.applicant === user?._id);
+    const { singleJob } = useSelector(store => store.job);
+    const { user } = useSelector(store => store.auth);
+    const isInitiallyApplied = singleJob?.application?.some(application => application.applicant === user?._id);
     const [isApplied, setIsApplied] = useState(isInitiallyApplied);
     // const isApplied = singleJob?.application?.includes(user?._id);
     const params = useParams();
     const jobId = params.id;
-    
+
     const dispatch = useDispatch();
 
     const applyJobHandler = async () => {
         try {
-            const res = await axios.get(`${APPLICATION_API_ENDPOINT}/apply/${jobId}`,{ withCredentials: true });
+            const res = await axios.get(`${APPLICATION_API_ENDPOINT}/apply/${jobId}`, { withCredentials: true });
             if (res.data.success) {
                 setIsApplied(true);
-                const updatedSingleJob = {...singleJob, application: [...singleJob.application, {applicant: user?._id}]}
+                const updatedSingleJob = { ...singleJob, application: [...singleJob.application, { applicant: user?._id }] }
                 dispatch(setSingleJob(updatedSingleJob));
                 toast.success(res.data.message);
             }
@@ -35,7 +35,7 @@ function JobDescription() {
             console.error(errorMessage);
         }
     }
-    
+
 
     useEffect(() => {
         const fetchSingleJob = async () => {
@@ -43,11 +43,11 @@ function JobDescription() {
                 const res = await axios.get(`${JOB_API_ENDPOINT}/get/${jobId}`, { withCredentials: true })
                 if (res.data.success) {
                     dispatch(setSingleJob(res.data.data))
-                    setIsApplied(res.data.data.application.some(application=>application.applicant === user?._id));
+                    setIsApplied(res.data.data.application.some(application => application.applicant === user?._id));
                 }
             } catch (error) {
                 console.error(error);
-                const errorMessage = error.response?.data?.message || error.message || "Something went wrong!"; 
+                const errorMessage = error.response?.data?.message || error.message || "Something went wrong!";
                 console.error(errorMessage);
             }
         }
@@ -67,19 +67,22 @@ function JobDescription() {
                 </div>
                 <Button
                     disabled={isApplied}
-                    className={`rounded-lg ${isApplied ? 'bg-gray-600 cursor-not-allowed' : 'bg-[#7209b7] hover:bg-[#5f32ad] cursor-pointer'}`} onClick={isApplied? null : applyJobHandler}>
+                    className={`rounded-lg ${isApplied ? 'bg-gray-600 cursor-not-allowed' : 'bg-[#7209b7] hover:bg-[#5f32ad] cursor-pointer'}`} onClick={isApplied ? null : applyJobHandler}>
                     {isApplied ? 'Already applied' : 'Apply Now'}
                 </Button>
             </div>
-            <h1 className='border-b-2 border-b-gray-300 font-md py-4'>Job Description</h1>
-            <div className='my-4'>
+            <h1 className='border-b-2 border-b-gray-300 font-lg font-bold py-4'>Job Description</h1>
+            <div className='my-4 border border-gray-100 p-4 shadow-lg'>
                 <h1 className='font-bold my-1'>Role: <span className='pl-4 font-normal text-gray-800'>{singleJob?.title}</span></h1>
                 <h1 className='font-bold my-1'>Location: <span className='pl-4 font-normal text-gray-800'>{singleJob?.location}</span></h1>
-                <h1 className='font-bold my-1'>Description: <span className='pl-4 font-normal text-gray-800'>{singleJob?.description}</span></h1>
-                <h1 className='font-bold my-1'>Experience: <span className='pl-4 font-normal text-gray-800'>{singleJob?.experience}yrs</span></h1>
+                {/* <h1 className='font-bold my-1'>Experience: <span className='pl-4 font-normal text-gray-800'>{singleJob?.experience}yrs</span></h1> */}
                 <h1 className='font-bold my-1'>Salary: <span className='pl-4 font-normal text-gray-800'>{singleJob?.salary}LPA</span></h1>
                 <h1 className='font-bold my-1'>Total Applicants: <span className='pl-4 font-normal text-gray-800'>{singleJob?.application?.length}</span></h1>
                 <h1 className='font-bold my-1'>Posted Date: <span className='pl-4 font-normal text-gray-800'>{singleJob?.createdAt?.split("T")[0]}</span></h1>
+                <h1 className='font-bold my-1 p-2 inset-shadow-sm inset-shadow-indigo-500'>Description: <div
+                    className='pl-4 font-normal text-gray-800'
+                    dangerouslySetInnerHTML={{ __html: singleJob?.description }}
+                /></h1>
             </div>
         </div>
     )

@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux'
 // import useGetCompanyById from '@/hooks/useGetCompanyById'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select'
 import { setSingleJob } from '@/redux/jobSlice'
+import { Editor } from '@tinymce/tinymce-react'
 
 function CompanySetup() {
     // const params = useParams();
@@ -43,8 +44,8 @@ function CompanySetup() {
     }
 
     const selectChangeHandler = (value) => {
-        const selectedCompany = allCompanies.find((company)=> company.name.toLowerCase() === value);
-        setInput({...input, company:selectedCompany._id});
+        const selectedCompany = allCompanies.find((company) => company.name.toLowerCase() === value);
+        setInput({ ...input, company: selectedCompany._id });
     };
 
 
@@ -54,10 +55,11 @@ function CompanySetup() {
         try {
             setLoading(true);
             const res = await axios.post(`${JOB_API_ENDPOINT}/post`, input, {
-                headers:{
-                    'Content-Type':'application/json'
+                headers: {
+                    'Content-Type': 'application/json'
                 },
-                withCredentials: true,});
+                withCredentials: true,
+            });
             if (res.data.success) {
                 // dispatch(setSingleJob(res.data.data))
                 toast.success(res.data.message);
@@ -149,7 +151,7 @@ function CompanySetup() {
                                     <SelectGroup>
                                         <SelectLabel>Company</SelectLabel>
                                         {
-                                            allCompanies.length >=0 && allCompanies.map((company)=>(
+                                            allCompanies.length >= 0 && allCompanies.map((company) => (
                                                 <SelectItem value={company?.name?.toLowerCase()} key={company._id}>{company.name}</SelectItem>
                                             ))
                                         }
@@ -166,14 +168,27 @@ function CompanySetup() {
                 value={input.description}
                 onChange={changeEventHandler}
               /> */}
-                        <textarea
-                            name="description"
-                            id=""
+                        <Editor
+                            apiKey="p3ykwsrogkavpyjlzch5xcigs0vifjxdpefknm42gmskarph" // optional
                             value={input.description}
-                            onChange={changeEventHandler}
-                            className='w-full h-32 border border-gray-300 rounded-md p-2'
-                            placeholder='Description'
-                        ></textarea>
+                            onEditorChange={(newValue, editor) =>
+                                setInput({ ...input, description: newValue })
+                            }
+                            init={{
+                                height: 300,
+                                menubar: false,
+                                plugins: [
+                                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview', 'anchor',
+                                    'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                                    'insertdatetime', 'media', 'table', 'paste', 'help', 'wordcount'
+                                ],
+                                toolbar:
+                                    'undo redo | formatselect | bold italic underline | \
+                                    alignleft aligncenter alignright alignjustify | \
+                                    bullist numlist outdent indent | removeformat | help'
+                            }}
+                        />
+
                     </div>
                     {
                         loading ? <Button className='w-full my-4'> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait</Button> : <Button type='submit' className='w-full mt-8'>Update</Button>
