@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Navbar from './shared/Navbar'
 import { Avatar, AvatarImage } from './ui/avatar'
 import { Button } from './ui/button'
-import { Contact, Mail, Pen } from 'lucide-react'
+import { Camera, Contact, Mail, Pen } from 'lucide-react'
 import { Badge } from './ui/badge'
 import { Label } from './ui/label'
 import AppliedJobTabel from './AppliedJobTabel'
@@ -75,7 +75,7 @@ function Profile() {
                                 className="hidden"
                             />
 
-                            <button onClick={handleClick} className='absolute top-17 bg-border  p-1  rounded-full hover:bg-gray-100 cursor-pointer'>📷</button>
+                            <button onClick={handleClick} className='absolute top-17 bg-border  p-1  rounded-full hover:bg-gray-100 cursor-pointer'><Camera/></button>
                         </div>
                         <div>
                             <h1 className='font-lg font-bold text-2xl'>{user?.fullName || "Loading..."}</h1>
