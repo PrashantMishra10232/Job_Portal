@@ -45,13 +45,10 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(409, "User with email or userName already existed");
   }
 
-  //upload a profile picture
-  console.log(req.file);
-  const profilePhotoLoacalPath = req.file?.path;
-
-  // console.log(profilePhotoLoacalPath);
-
-  const profilePhoto = await uploadOnCloudinary(profilePhotoLoacalPath);
+  const profilePhoto = await uploadOnCloudinary(
+    req.file.buffer,
+    req.file.originalname
+  );
 
   // console.log(profilePhoto);
   const profilePhoto_id = profilePhoto.public_id;
@@ -193,7 +190,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     const options = {
       httpOnly: true,
       secure: true,
-      sameSite:"none"
+      sameSite: "none",
     };
 
     const { accessToken } = await generateAccessAndRefreshToken(user._id);
@@ -214,19 +211,14 @@ const updateProfile = asyncHandler(async (req, res) => {
   const { fullName, email, phoneNumber, bio, skills } = req.body;
   console.log(fullName, email, phoneNumber, bio, skills);
 
-  const file = req.file?.path;
-  console.log("Uploaded File:", file);
-  if (!file) {
-    console.log("No file uploaded");
+  const resume = await uploadOnCloudinary(
+    req.file.buffer,
+    req.file.originalname
+  );
+
+  if (!resume) {
+    throw new ApiError(400, "Error while uploading resume");
   }
-  const resume = await uploadOnCloudinary(file);
-  if(!resume){
-    throw new ApiError(400, "Error while uploading resume");}
-  console.log("Resume:", resume.url);
-  
-  // if([fullName, email, phoneNumber, bio, skills].some((fields)=>fields?.trim()==="")){
-  //     throw new ApiError(404,"Some fields are missing")
-  // }
 
   const skillsArray = Array.isArray(skills) ? skills : skills?.split(",");
   const userId = req.user._id;
@@ -248,24 +240,18 @@ const updateProfile = asyncHandler(async (req, res) => {
         ...(resume && { "profile.resume": resume.url }),
       },
     },
-    { new: true} // `new: true` returns the updated user
+    { new: true } // `new: true` returns the updated user
   ).select("-refreshToken -password");
 
-  console.log("fullName",updatedUser.fullName);
-  console.log("updatedUser",updatedUser);
-  
+  console.log("fullName", updatedUser.fullName);
+  console.log("updatedUser", updatedUser);
+
   return res
     .status(200)
     .json(new ApiResponse(200, updatedUser, "Profile updated"));
 });
 
 const updateProfilePhoto = asyncHandler(async (req, res) => {
-  const profilePhotoPath = req.file?.path;
-
-  if (!profilePhotoPath) {
-    throw new ApiError(400, "Profile Photo file is missing");
-  }
-
   // Check if the user has an existing profile photo ID (only delete if it exists)
   if (User.profilePhoto_id) {
     try {
@@ -275,7 +261,8 @@ const updateProfilePhoto = asyncHandler(async (req, res) => {
     }
   }
 
-  const profilePhoto = await uploadOnCloudinary(profilePhotoPath);
+  const profilePhoto = await uploadOnCloudinary(req.file.buffer, req.file.originalname);
+  const profilePhoto_id = profilePhoto.public_id;
 
   if (!profilePhoto) {
     throw new ApiError(400, "Error while uploading profile photo");
@@ -287,6 +274,7 @@ const updateProfilePhoto = asyncHandler(async (req, res) => {
       $set: {
         profile: {
           profilePhoto: profilePhoto.url,
+          profilePhoto_id: profilePhoto_id,
         },
       },
     },
