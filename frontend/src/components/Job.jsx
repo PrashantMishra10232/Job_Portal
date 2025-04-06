@@ -1,18 +1,27 @@
 import { Bookmark } from 'lucide-react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button } from './ui/button'
 import { Avatar, AvatarImage } from './ui/avatar'
 import { Badge } from './ui/badge'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { setSavedJobs } from '@/redux/jobSlice'
+// import useGetJobById from '@/hooks/useGetJobById'
 
 function Job({ job }) {
   const navigate = useNavigate();
   const daysAgo = Math.floor((new Date() - new Date(job?.createdAt)) / (1000 * 60 * 60 * 24));
+  const dispatch = useDispatch();
+  // const {allJobs} =  useSelector((state)=>state.job);
+  const jobSaveHandler=async(job)=>{
+    dispatch(setSavedJobs(job))
+  }
+
   return (
     <div className='p-5 rounded-md shadow-xl bg-white border border-gray-200'>
       <div className='flex items-center justify-between'>
         <p className='text-sm text-gray-500'>{daysAgo} days ago</p>
-        <Button variant='outline' className='rounded-full' size='icon'><Bookmark /></Button>
+        <Button variant='outline' className='rounded-full' size='icon' onClick={()=>jobSaveHandler}><Bookmark /></Button>
       </div>
       <div className='flex items-center gap-2 my-2'>
         <Button className='p-6' variant='outline' size="icon">
@@ -40,7 +49,7 @@ function Job({ job }) {
       </div>
       <div className='flex items-center gap-4 mt-4'>
         <Button variant='outline' onClick={() => navigate(`/description/${job?._id}`)}>Details</Button>
-        <Button className='bg-[#7209b7]'>Save for later</Button>
+        <Button onClick={()=>jobSaveHandler()} className='bg-[#7209b7]'>Save for later</Button>
       </div>
     </div>
   )
