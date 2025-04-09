@@ -1,10 +1,10 @@
 import { Bookmark } from 'lucide-react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 import { Avatar, AvatarImage } from './ui/avatar'
 import { Badge } from './ui/badge'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { setSavedJobs } from '@/redux/jobSlice'
 // import useGetJobById from '@/hooks/useGetJobById'
 
@@ -12,16 +12,30 @@ function Job({ job }) {
   const navigate = useNavigate();
   const daysAgo = Math.floor((new Date() - new Date(job?.createdAt)) / (1000 * 60 * 60 * 24));
   const dispatch = useDispatch();
-  // const {allJobs} =  useSelector((state)=>state.job);
-  const jobSaveHandler=async(job)=>{
-    dispatch(setSavedJobs(job))
-  }
 
+  //to save a job
+  const [saved, setSaved] = useState(() => {
+    const existingJobs = JSON.parse(localStorage.getItem("savedJobs")) || [];
+    return existingJobs.some((j) => j._id === job._id);
+  });
+
+  const jobSaveHandler = async (job) => {
+    dispatch(setSavedJobs(job));
+    const existingJob = JSON.parse(localStorage.getItem("savedJobs")) || [];
+
+    const isAlreadySaved = existingJob.some((j) => j._id === job._id)
+    if (!isAlreadySaved) {
+      const updatedJob = [...existingJob, job];
+      localStorage.setItem("savedJobs", JSON.stringify(updatedJob));
+      setSaved(true);
+    }
+  }
+  
   return (
-    <div className='p-5 rounded-md shadow-xl bg-white border border-gray-200'>
+    <div className='p-5 rounded-md shadow-xl bg-white border border-gray-200 hover:shadow-2xl overflow-x-hidden '>
       <div className='flex items-center justify-between'>
         <p className='text-sm text-gray-500'>{daysAgo} days ago</p>
-        <Button variant='outline' className='rounded-full' size='icon' onClick={()=>jobSaveHandler}><Bookmark /></Button>
+        <Button variant='outline' disabled={saved} className='rounded-full cursor-pointer' size='icon' onClick={saved ? null : () => jobSaveHandler(job)}><Bookmark /></Button>
       </div>
       <div className='flex items-center gap-2 my-2'>
         <Button className='p-6' variant='outline' size="icon">
@@ -49,7 +63,7 @@ function Job({ job }) {
       </div>
       <div className='flex items-center gap-4 mt-4'>
         <Button variant='outline' onClick={() => navigate(`/description/${job?._id}`)}>Details</Button>
-        <Button onClick={()=>jobSaveHandler()} className='bg-[#7209b7]'>Save for later</Button>
+        <Button disabled={saved} onClick={saved ? null : () => jobSaveHandler(job)} className={`${saved ? 'bg-green-500 cursor-not-allowed' : 'bg-[#7209b7]'} cursor-pointer`}>{saved? 'Saved':'Save for later'}</Button>
       </div>
     </div>
   )

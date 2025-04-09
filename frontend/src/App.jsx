@@ -14,10 +14,7 @@ import JobSetup from './components/admin/JobSetup'
 import JobApplicantsTable from './components/admin/JobApplicantsTable'
 import ProtectedRoute from './components/admin/ProtectedRoute'
 import AboutUs from './components/AboutUs'
-
-// import axios from 'axios';
-// import { USER_API_ENDPOINT } from './utils/constant';
-
+import SavedJobs from './components/ui/SavedJobs'
 
 
 const appRouter = createBrowserRouter([
@@ -52,6 +49,10 @@ const appRouter = createBrowserRouter([
   {
     path: '/about',
     element: <AboutUs />
+  },
+  {
+    path: '/savedJobs',
+    element: <SavedJobs />
   },
 
 

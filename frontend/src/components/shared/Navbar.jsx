@@ -1,13 +1,14 @@
 // import { Avatar } from '@radix-ui/react-avatar'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Link } from "react-router-dom"
 import { Button } from '../ui/button'
 import axios from 'axios'
 import { USER_API_ENDPOINT } from "@/utils/constant"
 import { toast } from 'sonner'
 import { useDispatch, useSelector } from 'react-redux'
-import { refreshAccessToken } from '@/redux/authSlice'
+// import { refreshAccessToken } from '@/redux/authSlice'
 import { useNavigate } from 'react-router-dom'
+
 import {
   Popover,
   PopoverContent,
@@ -17,8 +18,17 @@ import {
   Avatar,
   AvatarImage,
 } from "../ui/avatar"
-import { LogOut, User2 } from 'lucide-react'
+import { AlignJustify, Bookmark, LogOut, User2 } from 'lucide-react'
 import { setToken, setUser } from '@/redux/authSlice'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 
 function Navbar() {
   // const { token } = useSelector(store => store.auth)
@@ -50,25 +60,49 @@ function Navbar() {
 
   return (
     <div className='bg-white'>
-      <div className='flex justify-between items-center mx-auto max-w-7xl h-16'>
+      <div className='flex justify-between items-center mx-auto w-[90%] sm:max-w-7xl h-16'>
+        <div className='block sm:hidden'>
+          <DropdownMenu>
+            <DropdownMenuTrigger className='cursor-pointer'><AlignJustify /></DropdownMenuTrigger>
+            {user && user.role === "Recruiter" ? (
+              <DropdownMenuContent>
+                <DropdownMenuLabel><h1 className='text-blue-600'>Chakri</h1><span className='text-[#F83002]'>Portal</span></DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <Link to='/admin/companies'><DropdownMenuItem className='cursor-pointer'>Companies</DropdownMenuItem></Link>
+                <Link to='/admin/jobs'><DropdownMenuItem className='cursor-pointer'>Jobs</DropdownMenuItem></Link>
+              </DropdownMenuContent>
+            ) : (
+              <DropdownMenuContent>
+                <DropdownMenuLabel>Chakri<span className='text-[#F83002]'>Portal</span></DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <Link to='/'><DropdownMenuItem className='cursor-pointer'>Home</DropdownMenuItem></Link>
+                <Link to='/jobs'><DropdownMenuItem className='cursor-pointer'>Jobs</DropdownMenuItem></Link>
+                <Link to='/browse'><DropdownMenuItem className='cursor-pointer'>Browse</DropdownMenuItem></Link>
+                <Link to='/about'><DropdownMenuItem className='cursor-pointer'>About us</DropdownMenuItem></Link>
+              </DropdownMenuContent>
+            )}
+
+          </DropdownMenu>
+
+        </div>
         <div>
           <h1 className='text-blue-600 font-bold text-2xl text-center'>
             Chakri<span className='text-[#F83002]'>Portal</span>
           </h1>
         </div>
-        <div className='flex items-center gap-12'>
-          <ul className='flex font-medium items-center gap-5'>
+        <div className='flex items-center gap-12 '>
+          <ul className='hidden sm:flex font-medium items-center gap-5'>
             {
               user && user.role === 'Recruiter' ? (
                 <>
-                  <li><Link to="/admin/companies">Companies</Link></li>
-                  <li><Link to="/admin/jobs">Jobs</Link></li>
+                  <li className='hover:underline font-medium'><Link to="/admin/companies">Companies</Link></li>
+                  <li className='hover:underline font-medium'><Link to="/admin/jobs">Jobs</Link></li>
                 </>
               ) : (
                 <>
-                  <li><Link to='/'>Home</Link></li>
-                  <li><Link to='/jobs'>Jobs</Link></li>
-                  <li><Link to='/browse'>Browse</Link></li>
+                  <li className='hover:underline font-medium'><Link to='/'>Home</Link></li>
+                  <li className='hover:underline font-medium'><Link to='/jobs'>Jobs</Link></li>
+                  <li className='hover:underline font-medium'><Link to='/browse'>Browse</Link></li>
                 </>
               )
             }
@@ -99,10 +133,17 @@ function Navbar() {
                 <div className='flex flex-col my-2 text-gray-600'>
                   {
                     user && user.role === 'Student' && (
-                      <div className='flex w-fit items-center gap-2 cursor-pointer'>
-                        <User2 />
-                        <Button variant='link'><Link to="/profile">View Profile</Link></Button>
+                      <div>
+                        <div className='flex w-fit items-center gap-2 cursor-pointer'>
+                          <User2 />
+                          <Button variant='link'><Link to="/profile">View Profile</Link></Button>
+                        </div>
+                        <div className='flex w-fit items-center gap-2 cursor-pointer'>
+                          <Bookmark />
+                          <Button variant='link'><Link to="/savedJobs">Saved Jobs</Link></Button>
+                        </div>
                       </div>
+
                     )
                   }
 

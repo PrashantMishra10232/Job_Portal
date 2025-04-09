@@ -28,7 +28,7 @@ function AppliedJobTabel() {
     
 
   return (
-    <div>
+    <div className='sm:mx-auto mx-2 p-1'>
         <Table>
             <TableCaption>List of your applied jobs</TableCaption>
             <TableHeader>

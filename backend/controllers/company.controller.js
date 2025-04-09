@@ -36,11 +36,11 @@ const getCompany = asyncHandler(async (req, res) => {
   if (!userId) {
     throw new ApiError(401, "User id is required");
   }
-  const companies = await Company.find({userId});
+  const companies = await Company.find({ userId });
   if (!companies) {
     throw new ApiError(404, "No company found");
   }
-  
+
   return res
     .status(200)
     .json(new ApiResponse(200, companies, "Companies Available!"));
@@ -59,11 +59,8 @@ const getCompanyById = asyncHandler(async (req, res) => {
 
 const updateCompany = asyncHandler(async (req, res) => {
   const { name, description, website, location } = req.body;
-  const logoLocalPath = req.file?.path;
-  if (!logoLocalPath) {
-    throw new ApiError(401, "can't get your picture");
-  }
-  const logo = await uploadOnCloudinary(logoLocalPath);
+  
+  const logo = await uploadOnCloudinary(req.file.buffer,req.file.originalname);
   if (!logo) {
     throw new ApiError(401, "Error while uploading logo");
   }

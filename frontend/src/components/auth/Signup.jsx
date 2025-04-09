@@ -83,7 +83,7 @@ function Signup() {
         <div>
             <Navbar />
             <div className='flex items-center justify-center max-w-7xl mx-auto'>
-                <form onSubmit={submitHandler} className='w-1/2 border border-gray-200 rounded-md p-4 my-10'>
+                <form onSubmit={submitHandler} className='md:w-1/2 w-[80%] border border-gray-200 rounded-md p-4 my-10 shadow-2xl'>
                     <h1 className='font-bold text-xl mb-5'>Signup</h1>
                     <div className='my-2'>
                         <Label className='mb-2'>Full Name</Label>
@@ -125,7 +125,7 @@ function Signup() {
                             placeholder='Enter new password'
                         />
                     </div>
-                    <div className='flex items-center justify-between'>
+                    <div className='lg:flex items-center justify-between'>
                         <RadioGroup defaultValue="Student" className='flex items-center gap-4 my-5'>
                             <div className="flex items-center space-x-2">
                                 <Input
