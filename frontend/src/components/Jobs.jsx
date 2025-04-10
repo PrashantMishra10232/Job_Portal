@@ -10,14 +10,14 @@ import { motion } from 'framer-motion'
 function Jobs() {
     const { allJobs, searchedQuery } = useSelector(state => state.job);
     const [filterJobs, setFilterJobs] = useState(allJobs);
-
+   
     useEffect(() => {
         if (searchedQuery) {
             const filteredJobs = allJobs.filter((job) => {
                 const salary = Number(job.salary); // Convert job salary to number
                 let isSalaryMatch = false;
 
-                // Check if searchedQuery matches salary range (e.g., "2-5LPA")
+                // Check if searchedQuery matches salary range
                 const salaryRangeMatch = searchedQuery.match(/(\d+)-(\d+)LPA/);
                 if (salaryRangeMatch) {
                     const min = Number(salaryRangeMatch[1]); // Extract min salary
@@ -59,7 +59,7 @@ function Jobs() {
                                                     exit={{ opacity: 0, x: -100 }}
                                                     transition={{ duration: 0.3 }}
                                                     key={job?._id}>
-                                                    <Job job={job} />
+                                                    <Job job={job}/>
                                                 </motion.div>
                                             ))
                                         }

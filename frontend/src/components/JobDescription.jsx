@@ -17,6 +17,8 @@ function JobDescription() {
     // const isApplied = singleJob?.application?.includes(user?._id);
     const params = useParams();
     const jobId = params.id;
+    // console.log("jobId",jobId);
+    
 
     const dispatch = useDispatch();
 
@@ -36,9 +38,11 @@ function JobDescription() {
         }
     }
 
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchSingleJob = async () => {
+            setLoading(true)
             try {
                 const res = await axios.get(`${JOB_API_ENDPOINT}/get/${jobId}`, { withCredentials: true })
                 if (res.data.success) {
@@ -49,13 +53,19 @@ function JobDescription() {
                 console.error(error);
                 const errorMessage = error.response?.data?.message || error.message || "Something went wrong!";
                 console.error(errorMessage);
+            } finally {
+                setLoading(false);
             }
         }
         fetchSingleJob()
-    }, [jobId, dispatch, user?._id])
+    }, [jobId, dispatch, user?._id]);
+
+    if (loading || !singleJob) {
+        return <div className="text-center py-10">Loading job details...</div>;
+    }
 
     return (
-        <div className='max-w-7xl mx-auto my-10'>
+        <div className='max-w-7xl mx-2 sm:mx-auto my-10'>
             <div className='flex justify-between'>
                 <div>
                     <h1 className='font-bold text-xl'>{singleJob?.title}</h1>

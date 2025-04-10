@@ -14,7 +14,7 @@ import JobSetup from './components/admin/JobSetup'
 import JobApplicantsTable from './components/admin/JobApplicantsTable'
 import ProtectedRoute from './components/admin/ProtectedRoute'
 import AboutUs from './components/AboutUs'
-import SavedJobs from './components/ui/SavedJobs'
+import SavedJobs from './components/SavedJobs'
 
 
 const appRouter = createBrowserRouter([
