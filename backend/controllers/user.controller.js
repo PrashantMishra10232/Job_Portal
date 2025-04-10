@@ -70,7 +70,7 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   const createdUser = await User.findById(user._id).select(
-    "-password -refreshToken"
+    "-password"
   );
 
   if (!createdUser) {
@@ -111,7 +111,7 @@ const loginUser = asyncHandler(async (req, res) => {
   );
 
   const loggedInUser = await User.findById(user._id).select(
-    "-password -refreshToken"
+    "-password"
   );
 
   const options = {
@@ -243,7 +243,7 @@ const updateProfile = asyncHandler(async (req, res) => {
       },
     },
     { new: true } // `new: true` returns the updated user
-  ).select("-refreshToken -password");
+  ).select("-password");
 
   console.log("fullName", updatedUser.fullName);
   console.log("updatedUser", updatedUser);
