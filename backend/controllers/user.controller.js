@@ -122,8 +122,11 @@ const loginUser = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, { options, maxAge: 60 * 1000 })
+    .cookie("refreshToken", refreshToken, {
+      options,
+      maxAge: 10 * 24 * 60 * 60 * 1000,
+    })
     .json(
       new ApiResponse(
         200,
@@ -160,10 +163,6 @@ const logOut = asyncHandler(async (req, res) => {
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
-  // const user = req.user._id;
-  // const incomingRefreshToken = await user.findOne;
-  // console.log(incomingRefreshToken);
-
   const incomingRefreshToken =
     req.cookies.refreshToken || req.body.refreshToken;
 
@@ -193,13 +192,16 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       sameSite: "none",
     };
 
-    const { accessToken } = await generateAccessAndRefreshToken(user._id);
+    const { accessToken, refreshToken: newRefreshToken } = await generateAccessAndRefreshToken(user._id);
+
+    user.refreshToken = newRefreshToken;
+    await user.save({validateBeforeSave:false});
 
     return (
       res
         .status(200)
         .cookie("accessToken", accessToken, options)
-        // .cookie("refreshToken", newRefreshToken, options)
+        .cookie("refreshToken", newRefreshToken, options)
         .json(new ApiResponse(200, { accessToken }, "Access Token refreshed"))
     );
   } catch (error) {
@@ -261,7 +263,10 @@ const updateProfilePhoto = asyncHandler(async (req, res) => {
     }
   }
 
-  const profilePhoto = await uploadOnCloudinary(req.file.buffer, req.file.originalname);
+  const profilePhoto = await uploadOnCloudinary(
+    req.file.buffer,
+    req.file.originalname
+  );
   const profilePhoto_id = profilePhoto.public_id;
 
   if (!profilePhoto) {

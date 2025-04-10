@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom'
 import useGetAllAdminsJobs from '@/hooks/useGetAllAdminsJobs'
 import { useDispatch } from 'react-redux'
 import { setSearchedJobs } from '@/redux/jobSlice'
-import Footer from '../shared/Footer'
 
 function Companies() {
     useGetAllAdminsJobs();

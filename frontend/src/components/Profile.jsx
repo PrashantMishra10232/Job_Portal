@@ -12,6 +12,7 @@ import { toast } from 'sonner'
 import axios from 'axios'
 import { USER_API_ENDPOINT } from '../utils/constant'
 import { setUser } from '@/redux/authSlice'
+import axiosInstance from '@/utils/axiosInstance'
 
 const isResume = true;
 function Profile() {
@@ -36,7 +37,7 @@ function Profile() {
             formData.append('profilePhoto', file);
 
             try {
-                const res = await axios.patch(`${USER_API_ENDPOINT}/profilePhoto`, formData, {
+                const res = await axiosInstance.patch(`${USER_API_ENDPOINT}/profilePhoto`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },

@@ -2,12 +2,14 @@
 import React from 'react'
 import { Link } from "react-router-dom"
 import { Button } from '../ui/button'
-import axios from 'axios'
+// import axios from 'axios'
+import { logout } from '@/redux/authSlice'
 import { USER_API_ENDPOINT } from "@/utils/constant"
 import { toast } from 'sonner'
 import { useDispatch, useSelector } from 'react-redux'
 // import { refreshAccessToken } from '@/redux/authSlice'
 import { useNavigate } from 'react-router-dom'
+import { persistor } from '@/redux/store'
 
 import {
   Popover,
@@ -19,7 +21,6 @@ import {
   AvatarImage,
 } from "../ui/avatar"
 import { AlignJustify, Bookmark, LogOut, User2 } from 'lucide-react'
-import { setToken, setUser } from '@/redux/authSlice'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,25 +29,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import axiosInstance from '@/utils/axiosInstance'
 
 
 function Navbar() {
-  // const { token } = useSelector(store => store.auth)
   const { user } = useSelector(store => store.auth)
-
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const logoutHandler = async () => {
     try {
-      const res = await axios.post(`${USER_API_ENDPOINT}/logOut`, {}, {
+      const res = await axiosInstance.post(`${USER_API_ENDPOINT}/logOut`, {}, {
         withCredentials: true,
       });
       if (res.data.success) {
-        localStorage.removeItem("loggedInUser");
-        dispatch(setToken(null));
-        dispatch(setUser(null));
+        dispatch(logout());
+        await persistor.purge(); 
         navigate("/");
         toast.success(res.data.message);
       }

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setAppliedJobs } from '@/redux/applicationSlice'
 import { toast } from 'sonner'
 import axios from 'axios'
+import axiosInstance from '@/utils/axiosInstance'
 
 function AppliedJobTabel() {
     const dispatch = useDispatch();
@@ -14,7 +15,7 @@ function AppliedJobTabel() {
     useEffect(()=>{
         const appliedJobHandler = async()=>{
             try {
-                const res = await axios.get(`${APPLICATION_API_ENDPOINT}/get`,{withCredentials:true})
+                const res = await axiosInstance.get(`${APPLICATION_API_ENDPOINT}/get`,{withCredentials:true})
                 if(res.data.success){
                     dispatch(setAppliedJobs(res.data.data));
                 }

@@ -4,10 +4,10 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { MoreHorizontal, Trash2, User } from 'lucide-react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-
 import { JOB_API_ENDPOINT } from '@/utils/constant'
 import axios from "axios"
 import { toast } from 'sonner'
+import axiosInstance from '@/utils/axiosInstance'
 
 function JobsTable() {
     const navigate = useNavigate();
@@ -27,7 +27,7 @@ function JobsTable() {
 
     const jobDeleteHandler = async (jobId) => {
         try {
-            const res = await axios.delete(`${JOB_API_ENDPOINT}/delete/${jobId}`, {
+            const res = await axiosInstance.delete(`${JOB_API_ENDPOINT}/delete/${jobId}`, {
                 withCredentials: true
             })
             if (res.data.success) {

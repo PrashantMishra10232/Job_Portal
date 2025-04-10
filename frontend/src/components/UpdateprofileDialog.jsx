@@ -11,6 +11,7 @@ import { USER_API_ENDPOINT } from '@/utils/constant'
 import { toast } from 'sonner'
 import { setUser } from '@/redux/authSlice'
 import axios from 'axios'
+import axiosInstance from '@/utils/axiosInstance'
 
 function UpdateprofileDialog({ open, setOpen }) {
 
@@ -71,7 +72,7 @@ function UpdateprofileDialog({ open, setOpen }) {
         
         try {
             dispatch(setLoading(true))
-            const res = await axios.patch(`${USER_API_ENDPOINT}/update_Account`, formData,
+            const res = await axiosInstance.patch(`${USER_API_ENDPOINT}/update_Account`, formData,
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data'

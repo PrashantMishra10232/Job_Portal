@@ -4,12 +4,13 @@ import Navbar from '../shared/Navbar'
 import { Popover } from '../ui/popover'
 import { PopoverContent, PopoverTrigger } from '@radix-ui/react-popover'
 import { MoreHorizontal } from 'lucide-react'
-import axios from 'axios'
+// import axios from 'axios'
 import { APPLICATION_API_ENDPOINT } from '@/utils/constant'
 import { useParams } from 'react-router-dom'
 import { setAllApplicants } from '@/redux/applicationSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'sonner'
+import axiosInstance from '@/utils/axiosInstance'
 
 const shortListingStatus = ["Approved", "Rejected"]
 
@@ -21,7 +22,7 @@ function JobApplicantsTable() {
 
     const statusHandler = async(status, id)=>{
         try {
-            const res = await axios.post(`${APPLICATION_API_ENDPOINT}/status/${id}/update`,{status},{withCredentials:true})
+            const res = await axiosInstance.post(`${APPLICATION_API_ENDPOINT}/status/${id}/update`,{status},{withCredentials:true})
             if(res.data.success){
                 toast.success(res.data.message)
             }
@@ -34,7 +35,7 @@ function JobApplicantsTable() {
     useEffect(() => {
         const fetchAllApplicants = async () => {
             try {
-                const res = await axios.get(`${APPLICATION_API_ENDPOINT}/${jobId}/applicants`, { withCredentials: true })
+                const res = await axiosInstance.get(`${APPLICATION_API_ENDPOINT}/${jobId}/applicants`, { withCredentials: true })
                 if (res.data.success) {
                     dispatch(setAllApplicants(res.data.data))
                 }

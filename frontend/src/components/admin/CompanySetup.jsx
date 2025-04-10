@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import axios from 'axios'
 import { toast } from 'sonner'
 import { COMPANY_API_ENDPOINT } from '@/utils/constant'
 import { useParams } from 'react-router-dom'
@@ -12,8 +11,8 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Loader2 } from 'lucide-react'
 import { useSelector } from 'react-redux'
-import { setSingleCompany } from '@/redux/companySlice'
 import useGetCompanyById from '@/hooks/useGetCompanyById'
+import axiosInstance from '@/utils/axiosInstance'
 
 function CompanySetup() {
   const params = useParams();
@@ -26,7 +25,6 @@ function CompanySetup() {
     logo: ""
   })
   const { singleCompany } = useSelector((state) => state.company);
-  const dispatch = useDispatch();
   const [loading, setLoading] = React.useState(false)
   const navigate = useNavigate();
 
@@ -51,7 +49,7 @@ function CompanySetup() {
     setLoading(true);
     try {
       setLoading(true);
-      const res = await axios.put(`${COMPANY_API_ENDPOINT}/update/${params.id}`, formData, {
+      const res = await axiosInstance.put(`${COMPANY_API_ENDPOINT}/update/${params.id}`, formData, {
         Headers: {
           'Content-Type': 'multipart/form-data',
         },

@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select'
 import { setSingleJob } from '@/redux/jobSlice'
 import { Editor } from '@tinymce/tinymce-react'
+import axiosInstance from '@/utils/axiosInstance'
 
 function CompanySetup() {
     // const params = useParams();
@@ -54,7 +55,7 @@ function CompanySetup() {
         console.log("input", input);
         try {
             setLoading(true);
-            const res = await axios.post(`${JOB_API_ENDPOINT}/post`, input, {
+            const res = await axiosInstance.post(`${JOB_API_ENDPOINT}/post`, input, {
                 headers: {
                     'Content-Type': 'application/json'
                 },

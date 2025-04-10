@@ -10,7 +10,7 @@ import axios from 'axios'
 import { USER_API_ENDPOINT } from "@/utils/constant"
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { setLoading, setUser, setToken } from '@/redux/authSlice'
+import { setLoading, setUser, setToken} from '@/redux/authSlice'
 import { Loader2 } from 'lucide-react'
 
 
@@ -43,10 +43,9 @@ function Login() {
 
             if (res.data.success) {
                 dispatch(setUser(res.data.data.loggedInUser));
+                dispatch(setToken(res.data.data.accessToken));
                 localStorage.setItem("loggedInUser", JSON.stringify(res.data.data.loggedInUser))
-
-                //save the token in memory
-                dispatch(setToken(res.data.data.accessToken))
+                localStorage.setItem("AccessToken", JSON.stringify(res.data.data.accessToken))
 
                 navigate("/");
                 toast.success(res.data.message);
@@ -65,9 +64,9 @@ function Login() {
     }
     useEffect(() => {
         if (!user) {
-            navigate('/login'); // <- this will loop if not properly guarded
+            navigate('/login');
         }else if (user && user.role === "Student") {
-            navigate('/'); // <- this will loop if not properly guarded
+            navigate('/'); 
         }
     }, [user, navigate]);
 
