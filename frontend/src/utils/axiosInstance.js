@@ -39,7 +39,7 @@ axiosInstance.interceptors.response.use(
                 
 
                 store.dispatch(setToken(accessToken)) //stored in redux
-                localStorage.setItem('AccessToken',accessToken); //stored in local storage
+                // localStorage.setItem('AccessToken',accessToken); //stored in local storage
 
                 //set the new access token in authorization header
                 originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
@@ -48,7 +48,7 @@ axiosInstance.interceptors.response.use(
                 return axiosInstance(originalRequest);
             } catch (refreshError) {
                 console.error('Refresh Token Error:' ,refreshError);
-                localStorage.removeItem('AccessToken');
+                // localStorage.removeItem('AccessToken');
                 store.dispatch(logout());
                 return Promise.reject(refreshError);
             }

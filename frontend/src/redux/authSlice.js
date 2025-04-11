@@ -19,7 +19,8 @@ export const storedAuthData = () => {
 
 const initialState = {
     user:storedAuthData() || null,
-    token: localStorage.getItem('AccessToken') || null,
+    // token: localStorage.getItem('AccessToken') || null,
+    token: null,
     loading: false, 
 };
 
@@ -37,7 +38,7 @@ const authSlice = createSlice({
             state.user = null;
             state.token = null;
             localStorage.removeItem("loggedInUser");
-            localStorage.removeItem("AccessToken");
+            // localStorage.removeItem("AccessToken");
         },
         setToken:(state,action)=>{
             state.token=action.payload;

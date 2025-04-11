@@ -45,7 +45,7 @@ function Login() {
                 dispatch(setUser(res.data.data.loggedInUser));
                 dispatch(setToken(res.data.data.accessToken));
                 localStorage.setItem("loggedInUser", JSON.stringify(res.data.data.loggedInUser))
-                localStorage.setItem("AccessToken", JSON.stringify(res.data.data.accessToken))
+                // localStorage.setItem("AccessToken", JSON.stringify(res.data.data.accessToken))
 
                 navigate("/");
                 toast.success(res.data.message);
