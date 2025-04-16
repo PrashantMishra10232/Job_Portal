@@ -15,6 +15,12 @@ import JobApplicantsTable from './components/admin/JobApplicantsTable'
 import ProtectedRoute from './components/admin/ProtectedRoute'
 import AboutUs from './components/AboutUs'
 import SavedJobs from './components/SavedJobs'
+import { useDispatch } from 'react-redux'
+import axios from 'axios'
+import { USER_API_ENDPOINT } from './utils/constant'
+import { logout, setToken } from './redux/authSlice'
+import { useEffect } from 'react'
+import AtsScore from './components/AI/AtsScore'
 
 
 const appRouter = createBrowserRouter([
@@ -41,6 +47,10 @@ const appRouter = createBrowserRouter([
   {
     path: '/browse',
     element: <Browse />
+  },
+  {
+    path: '/atsScore',
+    element: <AtsScore />
   },
   {
     path: '/profile',
@@ -87,6 +97,25 @@ const appRouter = createBrowserRouter([
 
 
 function App() {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const refreshToken = async () => {
+      try {
+        const res = await axios.post(`${USER_API_ENDPOINT}/refresh_token`, {}, {
+          withCredentials: true,
+        });
+        const { accessToken } = res.data.data;
+        dispatch(setToken(accessToken));
+      } catch (err) {
+        console.error("❌ Failed to refresh token on app load:", err);
+        dispatch(logout());
+      }
+    };
+
+    refreshToken();
+  }, []);
 
   return (
     <div>

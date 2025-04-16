@@ -10,9 +10,14 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
       req.cookies?.accessToken ||
       req.header("Authorization")?.replace("Bearer ", "");
 
+    console.log("🔐 Access Token Received:", token);
+
     if (!token) {
       throw new ApiError(401, "Unauthorized request");
     }
+
+    const decoded = JsonWebToken.decode(token);
+    console.log("🔎 Decoded token:", decoded);
 
     const decodedToken = JsonWebToken.verify(
       token,
@@ -30,6 +35,14 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
     req.user = user;
     next();
   } catch (error) {
-    throw new ApiError(401, "invalid access Token");
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
+      throw new ApiError(401, "Invalid or expired access token");
+    }
+
+    console.error("JWT verification error:", error);
+    throw new ApiError(500, "Internal Server Error");
   }
 });

@@ -78,6 +78,7 @@ function Navbar() {
                 <Link to='/jobs'><DropdownMenuItem className='cursor-pointer'>Jobs</DropdownMenuItem></Link>
                 <Link to='/browse'><DropdownMenuItem className='cursor-pointer'>Browse</DropdownMenuItem></Link>
                 <Link to='/about'><DropdownMenuItem className='cursor-pointer'>About us</DropdownMenuItem></Link>
+                <Link to='/atsScore'><DropdownMenuItem className='cursor-pointer'>Check-ATS</DropdownMenuItem></Link>
               </DropdownMenuContent>
             )}
 
@@ -85,8 +86,8 @@ function Navbar() {
 
         </div>
         <div>
-          <h1 className='text-blue-600 font-bold text-2xl text-center'>
-            Chakri<span className='text-[#F83002]'>Portal</span>
+          <h1 className='text-[#6B4EFF] font-bold text-2xl text-center'>
+            Career<span className='text-[#333333]'>Flow</span>
           </h1>
         </div>
         <div className='flex items-center gap-12 '>
@@ -102,6 +103,7 @@ function Navbar() {
                   <li className='hover:underline font-medium'><Link to='/'>Home</Link></li>
                   <li className='hover:underline font-medium'><Link to='/jobs'>Jobs</Link></li>
                   <li className='hover:underline font-medium'><Link to='/browse'>Browse</Link></li>
+                  <li className='bg-[#6A38C2] hover:bg-[#5b30a6] font-md text-white rounded-full px-2'><Link to='/atsScore'>Check-ATS</Link></li>
                 </>
               )
             }
