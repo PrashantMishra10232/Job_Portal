@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(async (config) => {
     const token = store.getState().auth.token;
-    console.log("token",token);
+    // console.log("token",token);
     
     if(token){
         config.headers['Authorization'] = `Bearer ${token}`
@@ -35,7 +35,7 @@ axiosInstance.interceptors.response.use(
 
                 //store the new access token
                 const{accessToken} = res.data.data;
-                console.log("accessToken",accessToken);
+                // console.log("accessToken",accessToken);
                 
 
                 store.dispatch(setToken(accessToken)) //stored in redux

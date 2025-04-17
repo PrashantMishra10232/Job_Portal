@@ -52,7 +52,7 @@ app.use("/api/v1/company",companyRouter)
 
 
 app.use((err, req, res, next) => {
-    console.error("❌ Error Middleware:", err); // Debugging logs
+    console.error("Error Middleware:", err); // Debugging logs
 
     res.status(err.statusCode || 500).json({
         success: false,

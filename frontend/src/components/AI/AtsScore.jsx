@@ -23,7 +23,7 @@ const ResumeAnalyzer = () => {
             setRawFile(resume);
 
             const text = await pdfParse(resume);
-            console.log("Resume Text", text);
+            // console.log("Resume Text", text);
             setFileText(text);
         } catch (error) {
             console.error("Error reading file:", error);

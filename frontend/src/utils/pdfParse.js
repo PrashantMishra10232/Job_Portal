@@ -4,7 +4,7 @@ async function pdfParse(resume) {
 
   try {
     const resumeText = await pdf(resume);
-    console.log("resumeText: ", resumeText);
+    // console.log("resumeText: ", resumeText);
     
     return resumeText.trim();
   } catch (error) {

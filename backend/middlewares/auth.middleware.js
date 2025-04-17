@@ -10,14 +10,14 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
       req.cookies?.accessToken ||
       req.header("Authorization")?.replace("Bearer ", "");
 
-    console.log("🔐 Access Token Received:", token);
+    // console.log("🔐 Access Token Received:", token);
 
     if (!token) {
       throw new ApiError(401, "Unauthorized request");
     }
 
     const decoded = JsonWebToken.decode(token);
-    console.log("🔎 Decoded token:", decoded);
+    // console.log("🔎 Decoded token:", decoded);
 
     const decodedToken = JsonWebToken.verify(
       token,

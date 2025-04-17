@@ -15,7 +15,7 @@ import JobApplicantsTable from './components/admin/JobApplicantsTable'
 import ProtectedRoute from './components/admin/ProtectedRoute'
 import AboutUs from './components/AboutUs'
 import SavedJobs from './components/SavedJobs'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { USER_API_ENDPOINT } from './utils/constant'
 import { logout, setToken } from './redux/authSlice'
@@ -77,19 +77,19 @@ const appRouter = createBrowserRouter([
   },
   {
     path: '/admin/companies/:id',
-    element: <ProtectedRoute><CompanySetup/></ProtectedRoute>
+    element: <ProtectedRoute><CompanySetup /></ProtectedRoute>
   },
   {
     path: '/admin/jobs',
-    element: <ProtectedRoute><AdminJobs/></ProtectedRoute>
+    element: <ProtectedRoute><AdminJobs /></ProtectedRoute>
   },
   {
     path: '/admin/jobs/create',
-    element: <ProtectedRoute><JobSetup/></ProtectedRoute>
+    element: <ProtectedRoute><JobSetup /></ProtectedRoute>
   },
   {
     path: '/admin/jobs/:id/applicants',
-    element: <ProtectedRoute><JobApplicantsTable/></ProtectedRoute>
+    element: <ProtectedRoute><JobApplicantsTable /></ProtectedRoute>
   },
 
 ])
@@ -99,23 +99,28 @@ const appRouter = createBrowserRouter([
 function App() {
 
   const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.auth)
 
   useEffect(() => {
-    const refreshToken = async () => {
-      try {
-        const res = await axios.post(`${USER_API_ENDPOINT}/refresh_token`, {}, {
-          withCredentials: true,
-        });
-        const { accessToken } = res.data.data;
-        dispatch(setToken(accessToken));
-      } catch (err) {
-        console.error("❌ Failed to refresh token on app load:", err);
-        dispatch(logout());
-      }
-    };
-
-    refreshToken();
-  }, []);
+    if (!token) {
+      const refreshToken = async () => {
+        try {
+          const res = await axios.post(`${USER_API_ENDPOINT}/refresh_token`, {}, {
+            withCredentials: true,
+          });
+          const { accessToken } = res.data.data;
+          dispatch(setToken(accessToken));
+        } catch (err) {
+          if (err.response?.status === 401) {
+            console.warn("No refresh token found, Skipping logout")
+          } else {
+            console.error("Failed to refresh token on app load:", err);
+          }
+        }
+      };
+      refreshToken();
+    }
+  }, [token]);
 
   return (
     <div>
