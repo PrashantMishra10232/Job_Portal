@@ -166,7 +166,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   const incomingRefreshToken =
     req.cookies.refreshToken || req.body.refreshToken;
 
-  console.log("incomingRefreshToken", incomingRefreshToken);
+  // console.log("incomingRefreshToken", incomingRefreshToken);
   
 
   if (!incomingRefreshToken) {
@@ -181,7 +181,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
     const user = await User.findById(decodedToken?._id);
 
-    console.log("user token", user.refreshToken);
+    // console.log("user token", user.refreshToken);
     
 
     if (!user) {
@@ -199,6 +199,9 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     };
 
     const { accessToken, refreshToken: newRefreshToken } = await generateAccessAndRefreshToken(user._id);
+    // console.log("Refreshed access token:", accessToken);
+    // console.log("Refreshed refresh token:", newRefreshToken);
+    
 
     user.refreshToken = newRefreshToken;
     await user.save({validateBeforeSave:false});
@@ -206,8 +209,8 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     return (
       res
         .status(200)
-        .cookie("accessToken", accessToken, options)
-        .cookie("refreshToken", newRefreshToken, options)
+        .cookie("accessToken", accessToken, {options,maxage:60*60*1000})
+        .cookie("refreshToken", newRefreshToken, {options,maxage:10*24*60*60*1000})
         .json(new ApiResponse(200, { accessToken }, "Access Token refreshed"))
     );
   } catch (error) {
@@ -217,7 +220,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
 const updateProfile = asyncHandler(async (req, res) => {
   const { fullName, email, phoneNumber, bio, skills } = req.body;
-  console.log(fullName, email, phoneNumber, bio, skills);
+  // console.log(fullName, email, phoneNumber, bio, skills);
 
   const resume = await uploadOnCloudinary(
     req.file.buffer,
@@ -283,11 +286,9 @@ const updateProfilePhoto = asyncHandler(async (req, res) => {
     req.user?._id,
     {
       $set: {
-        profile: {
-          profilePhoto: profilePhoto.url,
-          profilePhoto_id: profilePhoto_id,
-        },
-      },
+        "profile.profilePhoto": profilePhoto.url,
+        "profile.profilePhoto_id": profilePhoto_id,
+      }
     },
     {
       new: true,
