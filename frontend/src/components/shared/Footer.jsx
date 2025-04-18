@@ -10,8 +10,8 @@ function Footer() {
 
                 {/* Logo & Description */}
                 <div>
-                    <h1 className='text-blue-600 font-bold text-xl'>
-                        Chakri<span className='text-[#F83002]'>Portal</span>
+                    <h1 className='text-[#6B4EFF] font-bold text-2xl'>
+                        Career<span className='text-[#333333]'>Flow</span>
                     </h1>
                     <p className="text-sm mt-2 text-gray-400">
                         Your trusted platform for finding the perfect job. Search, apply, and grow your career.

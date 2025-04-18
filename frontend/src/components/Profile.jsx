@@ -58,7 +58,7 @@ function Profile() {
 
 
     return (
-        <div>
+        <div className='bg-gradient-to-b from-purple-100 to-white'>
             <Navbar />
             <div className='max-w-4xl mx-4 sm:mx-auto bg-white border border-gray-200 rounded-2xl my-5 p-8 shadow-2xl'>
                 <div className='flex justify-between'>

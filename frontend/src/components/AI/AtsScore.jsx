@@ -58,9 +58,9 @@ const ResumeAnalyzer = () => {
     };
 
     return (
-        <div>
+        <div className="bg-gradient-to-b from-purple-100 to-white">
             <Navbar />
-            <div className="flex flex-col min-h-screen items-center bg-gray-100 pt-6">
+            <div className="flex flex-col min-h-screen items-center pt-6">
                 <h1 className="text-4xl font-bold text-purple-600">Analyze Your Resume</h1>
                 <p className="text-xl text-gray-700 mt-2">See if your resume is job-ready</p>
 

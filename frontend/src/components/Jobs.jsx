@@ -36,7 +36,7 @@ function Jobs() {
 
 
     return (
-        <div>
+        <div className='bg-gradient-to-b from-purple-100 to-white'>
             <Navbar />
             <div>
                 <div className='sm:hidden block'>

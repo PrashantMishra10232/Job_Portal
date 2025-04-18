@@ -48,7 +48,7 @@ function JobApplicantsTable() {
         fetchAllApplicants()
     })
     return (
-        <div>
+        <div className='bg-gradient-to-b from-purple-100 to-white'>
             <Navbar />
             <div className='max-w-7xl mx-auto'>
                 <h1 className='font-bold text-xl my-5'>Applicants ({allApplicants?.application?.length})</h1>

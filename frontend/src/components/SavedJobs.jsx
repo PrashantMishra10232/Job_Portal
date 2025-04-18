@@ -9,7 +9,7 @@ function SavedJobs() {
     const { savedJobs } = useSelector((state) => state.job)
 
     return (
-        <div>
+        <div className='bg-gradient-to-b from-purple-100 to-white'>
             <Navbar />
             <div className='mx-2 sm:mx-auto'>
                 <h1 className='font-bold text-xl ml-2'>Saved Jobs ({savedJobs.length})</h1>

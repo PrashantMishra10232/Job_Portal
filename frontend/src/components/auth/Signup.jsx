@@ -11,6 +11,7 @@ import { toast } from 'sonner'
 import { useSelector, useDispatch } from 'react-redux'
 import { setLoading } from '@/redux/authSlice'
 import { Loader2 } from 'lucide-react'
+import { FaGoogle } from 'react-icons/fa'
 // import { u } from 'framer-motion/dist/types.d-B50aGbjN'
 
 
@@ -80,7 +81,7 @@ function Signup() {
     }, [user, navigate]);
 
     return (
-        <div>
+        <div className='bg-gradient-to-b from-purple-100 to-white'>
             <Navbar />
             <div className='flex items-center justify-center max-w-7xl mx-auto'>
                 <form onSubmit={submitHandler} className='md:w-1/2 w-[80%] border border-gray-200 rounded-md p-4 my-10 shadow-2xl'>
@@ -163,6 +164,13 @@ function Signup() {
                             type='submit'
                             className='w-full my-4'
                         >Signup</Button>
+                    }
+                    {
+                        loading ? <Button className='w-full my-4'> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait</Button> : <Button
+                            type='submit'
+                            className='w-full my-4 bg-blue-400'
+                            variant="secondary" 
+                        ><FaGoogle size={20}/>Continue with Google</Button>
                     }
                     <span className='text-sm'>Already have an account? <Link to='/login' className='text-blue-500'>Login</Link></span>
                 </form>

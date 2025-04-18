@@ -17,7 +17,7 @@ function Companies() {
         dispatch(setSearchedJobs(input))
     },[input])
     return (
-        <div>
+        <div className='bg-gradient-to-b from-purple-100 to-white'>
             <Navbar />
             <div className=' max-w-6xl mx-4 sm:mx-auto my-10'>
                 <div className='flex items-center justify-between my-5'>

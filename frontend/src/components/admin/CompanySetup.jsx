@@ -78,7 +78,7 @@ function CompanySetup() {
     })
   }, [singleCompany]);
   return (
-    <div>
+    <div className='bg-gradient-to-b from-purple-100 to-white'>
       <Navbar />
       <div className='max-w-xl mx-4 sm:mx-auto my-10'>
         <form action='' onSubmit={submitHandler}>

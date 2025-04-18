@@ -65,14 +65,14 @@ function Navbar() {
             <DropdownMenuTrigger className='cursor-pointer'><AlignJustify /></DropdownMenuTrigger>
             {user && user.role === "Recruiter" ? (
               <DropdownMenuContent>
-                <DropdownMenuLabel><h1 className='text-blue-600'>Chakri</h1><span className='text-[#F83002]'>Portal</span></DropdownMenuLabel>
+                <DropdownMenuLabel><h1 className='text-[#6B4EFF]'>Career<span className='text-[#333333]'>Flow</span></h1></DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <Link to='/admin/companies'><DropdownMenuItem className='cursor-pointer'>Companies</DropdownMenuItem></Link>
                 <Link to='/admin/jobs'><DropdownMenuItem className='cursor-pointer'>Jobs</DropdownMenuItem></Link>
               </DropdownMenuContent>
             ) : (
               <DropdownMenuContent>
-                <DropdownMenuLabel>Chakri<span className='text-[#F83002]'>Portal</span></DropdownMenuLabel>
+                <DropdownMenuLabel><h1 className='text-[#6B4EFF]'>Career<span className='text-[#333333]'>Flow</span></h1></DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <Link to='/'><DropdownMenuItem className='cursor-pointer'>Home</DropdownMenuItem></Link>
                 <Link to='/jobs'><DropdownMenuItem className='cursor-pointer'>Jobs</DropdownMenuItem></Link>

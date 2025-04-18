@@ -16,7 +16,7 @@ function Browse() {
         }
     },[])
     return (
-        <div className='m-3'>
+        <div className='m-2 bg-gradient-to-b from-purple-100 to-white'>
             <Navbar />
             <div className='max-w-7xl mx-auto my-10'>
                 <h1 className='font-bold text-xl my-10'>Search Results ({allJobs.length})</h1>

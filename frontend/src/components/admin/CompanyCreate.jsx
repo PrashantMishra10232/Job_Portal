@@ -37,7 +37,7 @@ function CompanyCreate() {
         }
     }
     return (
-        <div>
+        <div className='bg-gradient-to-b from-purple-100 to-white'>
             <Navbar />
             <div className='max-w-4xl mx-4 sm:mx-auto'>
                 <div className='my-10'>

@@ -7,7 +7,7 @@ const AboutUs = () => {
       <Navbar />
       <section className="bg-gradient-to-b from-purple-100 to-white py-16 px-6">
         <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-5xl font-extrabold text-purple-700 mb-6">About Chakri<span className='text-red-500'>Portal</span></h1>
+          <h1 className="text-5xl font-extrabold text-purple-700 mb-6">About Career<span className='text-[#333333]'>Flow</span></h1>
           <p className="text-lg text-purple-800 mb-10">
             We connect talent with opportunity. Whether you're a job seeker or an employer, ChakriPortal makes hiring and applying simpler, smarter, and more human.
           </p>
@@ -22,7 +22,7 @@ const AboutUs = () => {
             <div className="bg-white p-8 rounded-xl shadow-lg">
               <h2 className="text-2xl font-bold text-purple-600 mb-4">🚀 Who We Are</h2>
               <p className="text-purple-700">
-                ChakriPortal is a next-gen job search platform designed to help professionals and companies grow. We are passionate about creating career-changing opportunities.
+                CareerFlow is a next-gen job search platform designed to help professionals and companies grow. We are passionate about creating career-changing opportunities.
               </p>
             </div>
 
@@ -44,7 +44,7 @@ const AboutUs = () => {
             </div>
 
             <div className="bg-white p-8 rounded-xl shadow-lg">
-              <h2 className="text-2xl font-bold text-purple-600 mb-4">🌐 Why ChakriPortal?</h2>
+              <h2 className="text-2xl font-bold text-purple-600 mb-4">🌐 Why CareerFlow?</h2>
               <p className="text-purple-700">
                 Designed with ease and power in mind, we provide tools that work for both job seekers and recruiters. Efficiency meets elegance here.
               </p>
@@ -55,7 +55,7 @@ const AboutUs = () => {
             <h2 className="text-3xl font-bold text-purple-700 mb-2">Let’s build a better future together</h2>
             <p className="text-purple-800">We'd love to hear from you — reach out anytime.</p>
             <p className="mt-2 text-purple-600">
-              📧 <a href="mailto:chakriportal@example.com" className="underline">chakriportal@example.com</a>
+              📧 <a href="mailto:chakriportal@example.com" className="underline">CareerFlow@example.com</a>
             </p>
           </div>
         </div>
