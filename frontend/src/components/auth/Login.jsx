@@ -12,7 +12,9 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setLoading, setUser, setToken } from '@/redux/authSlice'
 import { Loader2 } from 'lucide-react'
-import { FaGoogle } from 'react-icons/fa'
+// import { FaGoogle } from 'react-icons/fa'
+// import {useGoogleLogin} from "@react-oauth/google"
+import GoogleLoginButton from './GoogleAuth'
 
 
 
@@ -129,11 +131,7 @@ function Login() {
                         >Login</Button>
                     }
                     {
-                        loading ? <Button className='w-full my-4'> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait</Button> : <Button
-                            type='submit'
-                            className='w-full my-4 bg-blue-400'
-                            variant="secondary"
-                        ><FaGoogle size={20} />Continue with Google</Button>
+                        loading ? <Button className='w-full my-4'> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait</Button> : <GoogleLoginButton role={input.role}/>
                     }
 
                     <span className='text-sm'>Don't have an account? <Link to='/signup' className='text-blue-500'>Signup</Link></span>

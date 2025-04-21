@@ -12,6 +12,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setLoading } from '@/redux/authSlice'
 import { Loader2 } from 'lucide-react'
 import { FaGoogle } from 'react-icons/fa'
+import GoogleLoginButton from './GoogleAuth'
 // import { u } from 'framer-motion/dist/types.d-B50aGbjN'
 
 
@@ -166,11 +167,7 @@ function Signup() {
                         >Signup</Button>
                     }
                     {
-                        loading ? <Button className='w-full my-4'> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait</Button> : <Button
-                            type='submit'
-                            className='w-full my-4 bg-blue-400'
-                            variant="secondary" 
-                        ><FaGoogle size={20}/>Continue with Google</Button>
+                        loading ? <Button className='w-full my-4'> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait</Button> : <GoogleLoginButton role={input.role}/>
                     }
                     <span className='text-sm'>Already have an account? <Link to='/login' className='text-blue-500'>Login</Link></span>
                 </form>

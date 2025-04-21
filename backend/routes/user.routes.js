@@ -7,8 +7,10 @@ import {
     logOut,
     refreshAccessToken,
     updateProfile,
-    updateProfilePhoto
+    updateProfilePhoto,
+    handleLoginSuccess
 } from "../controllers/user.controller.js"
+import passport from "passport";
 
 const router = Router();
 
@@ -20,5 +22,9 @@ router.route("/logOut").post(verifyJWT,logOut)
 router.route("/refresh_token").post(refreshAccessToken)
 router.route("/update_Account").patch(verifyJWT,upload.single("resume"),updateProfile)
 router.route("/profilePhoto").patch(verifyJWT,upload.single("profilePhoto"),updateProfilePhoto)
+router.route("/auth/google").get(passport.authenticate("google",{scope: ["profile","email"]}))
+router.route("/auth/google/callback").get(passport.authenticate("google",{session: false, failureRedirect:"/login"}),
+handleLoginSuccess
+);
 
 export default router;

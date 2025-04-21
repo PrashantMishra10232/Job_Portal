@@ -21,6 +21,7 @@ import { USER_API_ENDPOINT } from './utils/constant'
 import { logout, setToken } from './redux/authSlice'
 import { useEffect } from 'react'
 import AtsScore from './components/AI/AtsScore'
+import LoginSuccess from './components/auth/LoginSuccess'
 
 
 const appRouter = createBrowserRouter([
@@ -35,6 +36,10 @@ const appRouter = createBrowserRouter([
   {
     path: '/signup',
     element: <Signup />
+  },
+  {
+    path: '/login/success',
+    element: <LoginSuccess/>
   },
   {
     path: '/Jobs',

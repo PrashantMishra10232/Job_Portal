@@ -3,6 +3,9 @@ import JsonWebToken from "jsonwebtoken";
 import bcrypt from "bcryptjs"
 
 const userSchema = new mongoose.Schema({
+    googleId:{
+        type:String
+    },
     fullName: {
         type:String,
         required:true
@@ -14,11 +17,11 @@ const userSchema = new mongoose.Schema({
     },
     password:{
         type:String,
-        required:true
+        default: ""
     },
     phoneNumber:{
         type:Number,
-        required: true
+        default: ""
     },
     role:{
         type:String,

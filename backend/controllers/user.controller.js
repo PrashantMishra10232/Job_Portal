@@ -7,6 +7,7 @@ import {
   uploadOnCloudinary,
   deleteFromCloudinary,
 } from "../utils/cloudinary.js";
+import axios from "axios";
 
 const generateAccessAndRefreshToken = async (userId) => {
   try {
@@ -69,9 +70,7 @@ const registerUser = asyncHandler(async (req, res) => {
     },
   });
 
-  const createdUser = await User.findById(user._id).select(
-    "-password"
-  );
+  const createdUser = await User.findById(user._id).select("-password");
 
   if (!createdUser) {
     throw new ApiError(500, "something went wrong while registering the user");
@@ -110,9 +109,7 @@ const loginUser = asyncHandler(async (req, res) => {
     user._id
   );
 
-  const loggedInUser = await User.findById(user._id).select(
-    "-password"
-  );
+  const loggedInUser = await User.findById(user._id).select("-password");
 
   const options = {
     httpOnly: true,
@@ -134,6 +131,73 @@ const loginUser = asyncHandler(async (req, res) => {
         "User logged in successfully"
       )
     );
+});
+
+const googleCallback = async (req,accessToken, refreshtoken, profile, done) => {
+  try {
+    let user = await User.findOne({ googleId: profile.id });
+
+    const role = req.role;
+
+    if (!user) {
+      const imageResponse = await axios.get(profile.photos[0].value, {
+        responseType: "arraybuffer",
+      });
+
+      const fileName = `${profile.displayName.replace(/\s+/g, "_")}_photo`;
+
+      const profilePhoto = await uploadOnCloudinary(
+        imageResponse.data,
+        fileName
+      );
+
+      user = await User.create({
+        googleId: profile.id,
+        fullName: profile.displayName,
+        email: profile.emails[0].value,
+        role,
+        profile: {
+          profilePhoto: profilePhoto?.url || "",
+          profilePhoto_id: profilePhoto._id,
+        },
+      });
+    }
+    done(null, user); //passport attaches this user to req.user
+  } catch (error) {
+    console.error("Error in Google callback:", error);
+    done(error, null);
+  }
+};
+
+const handleLoginSuccess = asyncHandler(async (req, res) => {
+  const user = req.user;
+
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    user._id
+  );
+
+  const loggedInUser = await User.findById(user._id).select("-password");
+
+  const userEncoded = Buffer.from(JSON.stringify(loggedInUser)).toString(
+    "base64"
+  );
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  };
+
+  const redirectUrl = `${process.env.CLIENT_URL}/login/success?accessToken=${accessToken}&user=${userEncoded}`;
+
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, { options, maxAge: 60 * 60 * 1000 })
+    .cookie("refreshToken", refreshToken, {
+      options,
+      maxAge: 10 * 24 * 60 * 60 * 1000,
+    })
+    .redirect(redirectUrl);
 });
 
 const logOut = asyncHandler(async (req, res) => {
@@ -167,7 +231,6 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     req.cookies.refreshToken || req.body.refreshToken;
 
   // console.log("incomingRefreshToken", incomingRefreshToken);
-  
 
   if (!incomingRefreshToken) {
     throw new ApiError(401, "Unauthorized request");
@@ -182,7 +245,6 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     const user = await User.findById(decodedToken?._id);
 
     // console.log("user token", user.refreshToken);
-    
 
     if (!user) {
       throw new ApiError(401, "Invalid refresh token");
@@ -198,21 +260,22 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       sameSite: "none",
     };
 
-    const { accessToken, refreshToken: newRefreshToken } = await generateAccessAndRefreshToken(user._id);
+    const { accessToken, refreshToken: newRefreshToken } =
+      await generateAccessAndRefreshToken(user._id);
     // console.log("Refreshed access token:", accessToken);
     // console.log("Refreshed refresh token:", newRefreshToken);
-    
 
     user.refreshToken = newRefreshToken;
-    await user.save({validateBeforeSave:false});
+    await user.save({ validateBeforeSave: false });
 
-    return (
-      res
-        .status(200)
-        .cookie("accessToken", accessToken, {options,maxage:60*60*1000})
-        .cookie("refreshToken", newRefreshToken, {options,maxage:10*24*60*60*1000})
-        .json(new ApiResponse(200, { accessToken }, "Access Token refreshed"))
-    );
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, { options, maxage: 60 * 60 * 1000 })
+      .cookie("refreshToken", newRefreshToken, {
+        options,
+        maxage: 10 * 24 * 60 * 60 * 1000,
+      })
+      .json(new ApiResponse(200, { accessToken }, "Access Token refreshed"));
   } catch (error) {
     throw new ApiError(401, error?.message || "Invalid refresh token");
   }
@@ -288,7 +351,7 @@ const updateProfilePhoto = asyncHandler(async (req, res) => {
       $set: {
         "profile.profilePhoto": profilePhoto.url,
         "profile.profilePhoto_id": profilePhoto_id,
-      }
+      },
     },
     {
       new: true,
@@ -308,4 +371,6 @@ export {
   refreshAccessToken,
   updateProfile,
   updateProfilePhoto,
+  googleCallback,
+  handleLoginSuccess,
 };
