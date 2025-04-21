@@ -1,4 +1,4 @@
-import React, { use, useState } from 'react'
+import React, { useState } from 'react'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog'
 import { Label } from './ui/label'
 import { Input } from './ui/input'
@@ -10,7 +10,7 @@ import { Loader2 } from 'lucide-react'
 import { USER_API_ENDPOINT } from '@/utils/constant'
 import { toast } from 'sonner'
 import { setUser } from '@/redux/authSlice'
-import axios from 'axios'
+// import axios from 'axios'
 import axiosInstance from '@/utils/axiosInstance'
 
 function UpdateprofileDialog({ open, setOpen }) {
@@ -36,7 +36,7 @@ function UpdateprofileDialog({ open, setOpen }) {
                 phoneNumber: user.phoneNumber || "",
                 bio: user.profile?.bio || "",
                 skills: user.profile?.skills || [],
-                resume: user.profile?.resume || null
+                resume: null
             });
         }
     }, [user]);
@@ -127,6 +127,16 @@ function UpdateprofileDialog({ open, setOpen }) {
                                     type='email'
                                     onChange={changeEventHandler}
                                     defaultValue={input.email}
+                                    className='col-span-3' />
+                            </div>
+                            <div className='grid grid-cols-4 items-center gap-4'>
+                                <Label htmlFor='password' className='text-right'>Password</Label>
+                                <Input
+                                    id='password'
+                                    name='password'
+                                    type='password'
+                                    onChange={changeEventHandler}
+                                    defaultValue={input.password}
                                     className='col-span-3' />
                             </div>
                             <div className='grid grid-cols-4 items-center gap-4'>

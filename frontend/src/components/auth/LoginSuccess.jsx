@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser, setToken } from "@/redux/authSlice";
+import { toast } from "sonner";
 
 const LoginSuccess = () => {
     const navigate = useNavigate();
@@ -22,8 +23,9 @@ const LoginSuccess = () => {
             // Update Redux
             dispatch(setUser(user));
             dispatch(setToken(accessToken));
+            toast.message("Please set your account's password in the view profile section")
+            navigate("/");
 
-            navigate("/"); 
         }
     }, [dispatch, navigate]);
 

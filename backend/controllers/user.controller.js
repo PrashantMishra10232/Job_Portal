@@ -8,6 +8,7 @@ import {
   deleteFromCloudinary,
 } from "../utils/cloudinary.js";
 import axios from "axios";
+import bcrypt from "bcryptjs";
 
 const generateAccessAndRefreshToken = async (userId) => {
   try {
@@ -133,7 +134,13 @@ const loginUser = asyncHandler(async (req, res) => {
     );
 });
 
-const googleCallback = async (req,accessToken, refreshtoken, profile, done) => {
+const googleCallback = async (
+  req,
+  accessToken,
+  refreshtoken,
+  profile,
+  done
+) => {
   try {
     let user = await User.findOne({ googleId: profile.id });
 
@@ -284,11 +291,19 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 const updateProfile = asyncHandler(async (req, res) => {
   const { fullName, email, phoneNumber, bio, skills } = req.body;
   // console.log(fullName, email, phoneNumber, bio, skills);
+  let password = req.body?.password;
 
-  const resume = await uploadOnCloudinary(
-    req.file.buffer,
-    req.file.originalname
-  );
+  if (password) {
+    password = await bcrypt.hash(password, 10);
+  }
+
+  let resume;
+  if (req.file) {
+    resume = await uploadOnCloudinary(
+      req.file?.buffer,
+      req.file?.originalname
+    );
+  }
 
   if (!resume) {
     throw new ApiError(400, "Error while uploading resume");
@@ -308,17 +323,15 @@ const updateProfile = asyncHandler(async (req, res) => {
       $set: {
         ...(fullName && { fullName }),
         ...(email && { email }),
+        ...(password && { password }),
         ...(phoneNumber && { phoneNumber }),
         ...(bio && { "profile.bio": bio }),
         ...(skillsArray && { "profile.skills": skillsArray }),
         ...(resume && { "profile.resume": resume.url }),
       },
     },
-    { new: true } // `new: true` returns the updated user
+    { new: true }
   ).select("-password");
-
-  console.log("fullName", updatedUser.fullName);
-  console.log("updatedUser", updatedUser);
 
   return res
     .status(200)
