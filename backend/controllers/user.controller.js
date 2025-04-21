@@ -144,7 +144,17 @@ const googleCallback = async (
   try {
     let user = await User.findOne({ googleId: profile.id });
 
-    const role = req.role;
+    let role = "Student"; // default fallback
+    if (req.query.state) {
+      try {
+        const stateObj = JSON.parse(
+          Buffer.from(req.query.state, "base64").toString()
+        );
+        if (stateObj.role) role = stateObj.role;
+      } catch (err) {
+        console.error("Failed to parse state param:", err);
+      }
+    }
 
     if (!user) {
       const imageResponse = await axios.get(profile.photos[0].value, {
@@ -299,10 +309,7 @@ const updateProfile = asyncHandler(async (req, res) => {
 
   let resume;
   if (req.file) {
-    resume = await uploadOnCloudinary(
-      req.file?.buffer,
-      req.file?.originalname
-    );
+    resume = await uploadOnCloudinary(req.file?.buffer, req.file?.originalname);
   }
 
   if (!resume) {

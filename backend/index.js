@@ -6,8 +6,6 @@ import connectDB from "./utils/connection.js";
 // import { ApiError } from "./utils/ApiError.js";
 import passport from "passport";
 import GoogleStrategy from "passport-google-oauth20";
-import { User } from "./models/user.model.js";
-import { verifyJWT } from "./middlewares/auth.middleware.js";
 import { googleCallback } from "./controllers/user.controller.js";
 
 const app = express();
@@ -29,15 +27,6 @@ passport.use(
     googleCallback
   )
 );
-
-// passport.serializeUser((user, done) => {
-//   done(null, user.id); // MongoDB ID
-// });
-
-// passport.deserializeUser(async (id, done) => {
-//   const user = await User.findById(id);
-//   done(null, user);
-// });
 
 //middlewares
 app.use(express.json({ limit: "16mb" }));
