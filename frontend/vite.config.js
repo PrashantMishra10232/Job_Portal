@@ -17,5 +17,6 @@ export default defineConfig({
       usePolling: true, // Enables polling to detect file changes
       interval: 100, // Adjust polling interval (lower = more CPU usage)
     },
+    historyApiFallback: true,
   },
 })
