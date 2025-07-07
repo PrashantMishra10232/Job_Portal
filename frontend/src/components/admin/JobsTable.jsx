@@ -55,11 +55,11 @@ function JobsTable() {
                 </TableHeader>
                 <TableBody>
                     {filterJobs?.map((job) => (
-                        <tr>
-                            <TableCell>{job?.company?.name}</TableCell>
-                            <TableCell>{job.title}</TableCell>
-                            <TableCell>{job.application.length}</TableCell>
-                            <TableCell>{job.createdAt.split("T")[0]}</TableCell>
+                        <tr className='hover:bg-gray-100 transition-all duration-200'>
+                            <TableCell className='text-[#071C50] font-semibold'>{job?.company?.name}</TableCell>
+                            <TableCell className='text-gray-500 font-semibold'>{job.title}</TableCell>
+                            <TableCell className='text-[#071C50] font-semibold'>{job.application.length}</TableCell>
+                            <TableCell className='text-gray-500 font-semibold'>{job.createdAt.split("T")[0]}</TableCell>
                             <TableCell className='text-right cursor-pointer'>
                                 <Popover>
                                     <PopoverTrigger className='cursor-pointer'><MoreHorizontal /></PopoverTrigger>

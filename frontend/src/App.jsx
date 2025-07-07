@@ -18,10 +18,16 @@ import SavedJobs from './components/SavedJobs'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { USER_API_ENDPOINT } from './utils/constant'
-import { logout, setToken } from './redux/authSlice'
+import {setToken } from './redux/authSlice'
 import { useEffect } from 'react'
 import AtsScore from './components/AI/AtsScore'
 import LoginSuccess from './components/auth/LoginSuccess'
+import HrDashBoard from './components/admin/HrDashBoard'
+import InterviewScheduled from './components/admin/InterviewScheduled'
+import CompaniesDashboard from './components/admin/CompaniesDashboard'
+import TablesDashboard from './components/admin/TablesDashboard'
+import CalendarPage from './components/admin/CalendarPage'
+import InterviewSetup from './components/admin/InterviewSetup'
 
 
 const appRouter = createBrowserRouter([
@@ -73,8 +79,20 @@ const appRouter = createBrowserRouter([
 
   //admin
   {
+    path:'/admin/dashboard',
+    element:<ProtectedRoute><HrDashBoard/></ProtectedRoute>
+  },
+  {
+    path:'/admin/interviewSetup',
+    element:<ProtectedRoute><InterviewSetup/></ProtectedRoute>
+  },
+  {
     path: '/admin/companies',
     element: <ProtectedRoute><Companies /></ProtectedRoute>
+  },
+  {
+    path: '/admin/companies/dashboard',
+    element: <ProtectedRoute><CompaniesDashboard /></ProtectedRoute>
   },
   {
     path: '/admin/companies/create',
@@ -89,6 +107,14 @@ const appRouter = createBrowserRouter([
     element: <ProtectedRoute><AdminJobs /></ProtectedRoute>
   },
   {
+    path: '/admin/jobs/dashboard',
+    element: <ProtectedRoute><TablesDashboard /></ProtectedRoute>
+  },
+  {
+    path: '/admin/calendar/dashboard',
+    element: <ProtectedRoute><CalendarPage /></ProtectedRoute>
+  },
+  {
     path: '/admin/jobs/create',
     element: <ProtectedRoute><JobSetup /></ProtectedRoute>
   },
@@ -96,7 +122,10 @@ const appRouter = createBrowserRouter([
     path: '/admin/jobs/:id/applicants',
     element: <ProtectedRoute><JobApplicantsTable /></ProtectedRoute>
   },
-
+  {
+    path: '/admin/meetings',
+    element: <ProtectedRoute><InterviewScheduled/></ProtectedRoute>
+  }
 ])
 
 

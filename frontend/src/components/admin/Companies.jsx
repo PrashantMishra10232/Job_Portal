@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react'
-import Navbar from '../shared/Navbar'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import CompaniesTable from './CompaniesTable'
@@ -17,9 +16,8 @@ function Companies() {
         dispatch(setSearchedCompanies(input))
     },[input])
     return (
-        <div className='bg-gradient-to-b from-purple-100 to-white'>
-            <Navbar />
-            <div className=' max-w-6xl mx-4 sm:mx-auto my-10'>
+        <div>
+            <div className=' max-w-8xl mx-4 sm:mx-auto my-10'>
                 <div className='flex items-center justify-between my-5'>
                     <Input
                         className='w-fit'

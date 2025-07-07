@@ -22,7 +22,7 @@ function CompaniesTable() {
     },[allCompanies, searchedCompanies ])
     return (
         <div>
-            <Table>
+            <Table className='border border-gray-300 shadow-xl'>
                 <TableCaption>A list of your recent registered companies</TableCaption>
                 <TableHeader>
                     <TableRow>

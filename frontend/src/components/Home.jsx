@@ -13,7 +13,8 @@ function Home() {
   const { user } = useSelector(store => store.auth);
   useEffect(() => {
     if (user?.role === "Recruiter") {
-      navigate("/admin/Companies")
+      // navigate("/admin/Companies")
+      navigate("/admin/dashboard")
     }
   })
   useGetAllJobs();

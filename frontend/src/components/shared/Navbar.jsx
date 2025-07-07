@@ -58,7 +58,7 @@ function Navbar() {
   }
 
   return (
-    <div className='bg-white'>
+    <div className='bg-white shadow-xl'>
       <div className='flex justify-between items-center mx-auto w-[90%] sm:max-w-7xl h-16'>
         <div className='block sm:hidden'>
           <DropdownMenu>
@@ -67,8 +67,8 @@ function Navbar() {
               <DropdownMenuContent>
                 <DropdownMenuLabel><h1 className='text-[#6B4EFF]'>Career<span className='text-[#333333]'>Flow</span></h1></DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <Link to='/admin/companies'><DropdownMenuItem className='cursor-pointer'>Companies</DropdownMenuItem></Link>
-                <Link to='/admin/jobs'><DropdownMenuItem className='cursor-pointer'>Jobs</DropdownMenuItem></Link>
+                <Link to='/admin/companies/dashboard'><DropdownMenuItem className='cursor-pointer'>Companies</DropdownMenuItem></Link>
+                <Link to='/admin/jobs/dashboard'><DropdownMenuItem className='cursor-pointer'>Jobs</DropdownMenuItem></Link>
               </DropdownMenuContent>
             ) : (
               <DropdownMenuContent>
@@ -95,8 +95,8 @@ function Navbar() {
             {
               user && user.role === 'Recruiter' ? (
                 <>
-                  <li className='hover:underline font-medium'><Link to="/admin/companies">Companies</Link></li>
-                  <li className='hover:underline font-medium'><Link to="/admin/jobs">Jobs</Link></li>
+                  <li className='hover:underline font-medium'><Link to="/admin/companies/dashboard">Companies</Link></li>
+                  <li className='hover:underline font-medium'><Link to="/admin/jobs/dashboard">Jobs</Link></li>
                 </>
               ) : (
                 <>

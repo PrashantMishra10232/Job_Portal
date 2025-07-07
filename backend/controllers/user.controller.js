@@ -52,7 +52,6 @@ const registerUser = asyncHandler(async (req, res) => {
     req.file.originalname
   );
 
-  // console.log(profilePhoto);
   const profilePhoto_id = profilePhoto.public_id;
 
   if (!profilePhoto) {
@@ -94,14 +93,13 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "User does not exist");
   }
 
-  //checkin if the password is correct
   const isPasswordValid = await user.isPasswordCorrect(password);
 
   if (!isPasswordValid) {
     throw new ApiError(401, "Invalid user credentials");
   }
 
-  //check for correct role
+  
   if (role !== user.role) {
     throw new ApiError(400, "Account does  not exist with current role");
   }
@@ -115,7 +113,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
-    sameSite: "none", // ✅ Allows cross-origin cookies
+    sameSite: "none", 
   };
 
   return res
@@ -144,7 +142,7 @@ const googleCallback = async (
   try {
     let user = await User.findOne({ googleId: profile.id });
 
-    let role = "Student"; // default fallback
+    let role = "Student";
     if (req.query.state) {
       try {
         const stateObj = JSON.parse(
@@ -247,8 +245,6 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   const incomingRefreshToken =
     req.cookies.refreshToken || req.body.refreshToken;
 
-  // console.log("incomingRefreshToken", incomingRefreshToken);
-
   if (!incomingRefreshToken) {
     throw new ApiError(401, "Unauthorized request");
   }
@@ -260,8 +256,6 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     );
 
     const user = await User.findById(decodedToken?._id);
-
-    // console.log("user token", user.refreshToken);
 
     if (!user) {
       throw new ApiError(401, "Invalid refresh token");
@@ -279,8 +273,6 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
     const { accessToken, refreshToken: newRefreshToken } =
       await generateAccessAndRefreshToken(user._id);
-    // console.log("Refreshed access token:", accessToken);
-    // console.log("Refreshed refresh token:", newRefreshToken);
 
     user.refreshToken = newRefreshToken;
     await user.save({ validateBeforeSave: false });
@@ -300,7 +292,6 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
 const updateProfile = asyncHandler(async (req, res) => {
   const { fullName, email, phoneNumber, bio, skills } = req.body;
-  // console.log(fullName, email, phoneNumber, bio, skills);
   let password = req.body?.password;
 
   if (password) {
@@ -346,10 +337,9 @@ const updateProfile = asyncHandler(async (req, res) => {
 });
 
 const updateProfilePhoto = asyncHandler(async (req, res) => {
-  // Check if the user has an existing profile photo ID (only delete if it exists)
   if (User.profilePhoto_id) {
     try {
-      await deleteFromCloudinary(User.profilePhoto_id); // Delete the previous profile photo from Cloudinary
+      await deleteFromCloudinary(User.profilePhoto_id); 
     } catch (error) {
       throw new ApiError(500, "Error while deleting previous profile photo");
     }
