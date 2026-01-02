@@ -28,6 +28,7 @@ import CompaniesDashboard from './components/admin/CompaniesDashboard'
 import TablesDashboard from './components/admin/TablesDashboard'
 import CalendarPage from './components/admin/CalendarPage'
 import InterviewSetup from './components/admin/InterviewSetup'
+import InterviewSchedule from './components/admin/InterviewSchedule'
 
 
 const appRouter = createBrowserRouter([
@@ -87,6 +88,10 @@ const appRouter = createBrowserRouter([
     element:<ProtectedRoute><InterviewSetup/></ProtectedRoute>
   },
   {
+    path: '/admin/interview/schedule',
+    element: <ProtectedRoute><InterviewSchedule /></ProtectedRoute>
+  },
+  {
     path: '/admin/companies',
     element: <ProtectedRoute><Companies /></ProtectedRoute>
   },
@@ -101,10 +106,6 @@ const appRouter = createBrowserRouter([
   {
     path: '/admin/companies/:id',
     element: <ProtectedRoute><CompanySetup /></ProtectedRoute>
-  },
-  {
-    path: '/admin/jobs',
-    element: <ProtectedRoute><AdminJobs /></ProtectedRoute>
   },
   {
     path: '/admin/jobs/dashboard',

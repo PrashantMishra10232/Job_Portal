@@ -20,6 +20,11 @@ const initialState = {
   searchedJobs: "",
   singleJob: {},
   searchedQuery: "",
+  filters: {
+    location: [],
+    industry: [],
+    salary: []
+  },
   savedJobs: storedJobData() || [],
   loading: false,
 };
@@ -46,6 +51,16 @@ const jobSlice = createSlice({
     setSearchedQuery: (state, action) => {
       state.searchedQuery = action.payload;
     },
+    setFilters: (state, action) => {
+      state.filters = { ...state.filters, ...action.payload };
+    },
+    clearFilters: (state) => {
+      state.filters = {
+        location: [],
+        industry: [],
+        salary: []
+      };
+    },
     setSavedJobs: (state, action) => {
       if (!Array.isArray(state.savedJobs)) {
         state.savedJobs = [];
@@ -55,7 +70,18 @@ const jobSlice = createSlice({
       );
       if (!alreadySaved) {
         state.savedJobs.push(action.payload);
+        localStorage.setItem("savedJobs", JSON.stringify(state.savedJobs));
       }
+    },
+    removeSavedJob: (state, action) => {
+      state.savedJobs = state.savedJobs.filter(
+        (job) => job._id !== action.payload
+      );
+      localStorage.setItem("savedJobs", JSON.stringify(state.savedJobs));
+    },
+    clearSavedJobs: (state) => {
+      state.savedJobs = [];
+      localStorage.setItem("savedJobs", JSON.stringify([]));
     },
   },
 });
@@ -67,6 +93,10 @@ export const {
   setAllAdminsJobs,
   setSearchedJobs,
   setSearchedQuery,
+  setFilters,
+  clearFilters,
   setSavedJobs,
+  removeSavedJob,
+  clearSavedJobs,
 } = jobSlice.actions;
 export default jobSlice.reducer;

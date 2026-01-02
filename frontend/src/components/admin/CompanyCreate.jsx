@@ -53,7 +53,7 @@ function CompanyCreate() {
                 onChange = {(e)=>setName(e.target.value)}
                 />
                 <div className='flex items-center gap-2 my-18'>
-                    <Button variant='outline' onClick={()=>navigate('/admin/companies')}>Cancel</Button>
+                    <Button variant='outline' onClick={()=>navigate('/admin/companies/dashboard')}>Cancel</Button>
                     <Button onClick={registerNewCompany}>Continue</Button>
                 </div>
             </div>
