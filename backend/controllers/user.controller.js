@@ -118,9 +118,9 @@ const loginUser = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .cookie("accessToken", accessToken, { options, maxAge: 60 * 60 * 1000 })
+    .cookie("accessToken", accessToken, { ...options, maxAge: 60 * 60 * 1000 })
     .cookie("refreshToken", refreshToken, {
-      options,
+      ...options,
       maxAge: 10 * 24 * 60 * 60 * 1000,
     })
     .json(
@@ -207,9 +207,9 @@ const handleLoginSuccess = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .cookie("accessToken", accessToken, { options, maxAge: 60 * 60 * 1000 })
+    .cookie("accessToken", accessToken, { ...options, maxAge: 60 * 60 * 1000 })
     .cookie("refreshToken", refreshToken, {
-      options,
+      ...options,
       maxAge: 10 * 24 * 60 * 60 * 1000,
     })
     .redirect(redirectUrl);
@@ -287,10 +287,10 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
     return res
       .status(200)
-      .cookie("accessToken", accessToken, { options, maxage: 60 * 60 * 1000 })
+      .cookie("accessToken", accessToken, { ...options, maxAge: 60 * 60 * 1000 })
       .cookie("refreshToken", newRefreshToken, {
-        options,
-        maxage: 10 * 24 * 60 * 60 * 1000,
+        ...options,
+        maxAge: 10 * 24 * 60 * 60 * 1000,
       })
       .json(new ApiResponse(200, { accessToken }, "Access Token refreshed"));
   } catch (error) {
