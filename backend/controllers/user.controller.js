@@ -84,7 +84,7 @@ const registerUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
   const { role, email, password } = req.body;
 
-  if (!(email || password || role)) {
+  if (!email || !password || !role) {
     throw new ApiError(400, "All fields are required");
   }
 
@@ -216,24 +216,32 @@ const handleLoginSuccess = asyncHandler(async (req, res) => {
 });
 
 const logOut = asyncHandler(async (req, res) => {
-  await User.findByIdAndUpdate(
-    req.user._id,
-    {
-      $unset: {
-        refreshToken: 1, //removes the field from the document
-      },
-    },
-    {
-      new: true,
-    }
-  );
-
   const options = {
     httpOnly: true,
     secure: true,
     sameSite: "none",
   };
 
+  // Try to clear refresh token from DB if we can identify the user
+  // But don't fail if we can't (handles expired/invalid token cases)
+  try {
+    const token = req.cookies?.accessToken || req.headers.authorization?.replace("Bearer ", "");
+    if (token) {
+      const decoded = JsonWebToken.verify(token, process.env.ACCESS_TOKEN_SECRET);
+      if (decoded?._id) {
+        await User.findByIdAndUpdate(
+          decoded._id,
+          { $unset: { refreshToken: 1 } },
+          { new: true }
+        );
+      }
+    }
+  } catch (error) {
+    // Token invalid/expired - that's fine, just proceed to clear cookies
+    console.log("Logout: Could not clear DB refresh token (token invalid/expired)");
+  }
+
+  // Always clear cookies regardless of auth state
   return res
     .status(200)
     .clearCookie("accessToken", options)

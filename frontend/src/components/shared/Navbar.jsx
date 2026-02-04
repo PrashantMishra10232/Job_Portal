@@ -4,7 +4,6 @@ import { Link, useLocation } from "react-router-dom"
 import { Button } from '../ui/button'
 // import axios from 'axios'
 import { logout } from '@/redux/authSlice'
-import { USER_API_ENDPOINT } from "@/utils/constant"
 import { toast } from 'sonner'
 import { useDispatch, useSelector } from 'react-redux'
 // import { refreshAccessToken } from '@/redux/authSlice'
@@ -47,7 +46,7 @@ function Navbar() {
 
   const logoutHandler = async () => {
     try {
-      const res = await axiosInstance.post(`${USER_API_ENDPOINT}/logOut`, {}, {
+      const res = await axiosInstance.post('/logOut', {}, {
         withCredentials: true,
       });
       if (res.data.success) {
