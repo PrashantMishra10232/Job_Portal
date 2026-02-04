@@ -13,7 +13,7 @@ const applyJob = asyncHandler(async(req,res)=>{
     const existedApplication = await Application.findOne({job: jobId, applicant:userId})
 
     if(existedApplication){
-        throw new ApiError(400,"You have already applied for this jobs")
+        throw new ApiError(400,"You have already applied for this job")
     }
 
     const job = await Job.findById(jobId);
@@ -26,8 +26,18 @@ const applyJob = asyncHandler(async(req,res)=>{
         applicant:userId
     });
 
-    job.application.push(newApplication._id);
-    await job.save();
+    // Ensure application array exists before pushing
+    if (!job.application || !Array.isArray(job.application)) {
+        job.application = [];
+    }
+    
+    // Use $addToSet to prevent duplicates (though we already check above)
+    await Job.findByIdAndUpdate(
+        jobId,
+        { $push: { application: newApplication._id } },
+        { new: true }
+    );
+    
     return res.status(200).json(new ApiResponse(200,newApplication,"Job applied successfully"))
 })
 
