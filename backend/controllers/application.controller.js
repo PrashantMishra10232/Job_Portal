@@ -47,18 +47,23 @@ const getAtsApiKey = () => {
     return apiKey;
 }
 
-const ATS_SYSTEM_PROMPT = `You are an ATS resume analyzer.
+const ATS_SYSTEM_PROMPT = `You are an ATS resume analyzer. Score how well a resume matches a job description.
 
-Return ONLY valid JSON in this exact format:
+Scoring rubric (0-100 integer):
+- 90-100: resume has nearly all required skills, experience level, and keywords from the JD
+- 70-89: resume covers most required skills and relevant experience, with minor gaps
+- 50-69: partial match — some required skills present, others missing
+- 30-49: limited overlap — only a few JD keywords/skills present
+- 0-29: little to no relevant overlap
+
+Compare against the JD's: required skills, tools/technologies, years of experience, role responsibilities, and domain keywords.
+
+Return ONLY a JSON object with this exact schema (no markdown, no prose):
 {
-  "score": number,
-  "matchedKeywords": [],
-  "missingKeywords": []
-}
-
-Do not return markdown.
-Do not return explanations.
-Do not return extra text.`;
+  "score": <integer 0-100>,
+  "matchedKeywords": [<JD keywords/skills present in the resume>],
+  "missingKeywords": [<JD keywords/skills missing from the resume>]
+}`;
 
 const buildAtsUserPrompt = (resumeText, jobDescription) => {
     return `Job Description:
@@ -198,8 +203,9 @@ const analyzeAtsScore = asyncHandler(async(req,res)=>{
                     content: buildAtsUserPrompt(resumeText, jobDescription)
                 }
             ],
-            temperature: 0.2,
-            max_tokens: 300,
+            temperature: 0,
+            max_tokens: 800,
+            response_format: { type: "json_object" },
             stream: false
         });
 
